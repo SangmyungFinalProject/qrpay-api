@@ -24,6 +24,14 @@ function readCards(email, callback) {
     callback(null, cards);
 }
 
+function createCard(card, callback) {
+
+    console.log('card', card);
+
+    callback(null, card);
+}
+
 module.exports = {
-    readCards: readCards
+    readCards: readCards,
+    createCard: createCard
 };
