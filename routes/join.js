@@ -14,6 +14,7 @@ router.post('/', function (req, res) {
         password: req.body.password
     };
 
+
     UserController.insertUser(user, function(err, result) {
         if (err) {
             return res.json({error: err});
@@ -24,9 +25,29 @@ router.post('/', function (req, res) {
         response.data = result;
 
         res.send(response);
-
     });
-
 });
+
+router.post('/login', function (req, res) {
+    var user = {
+        email: req.body.email,
+        password: req.body.password
+    };
+
+    UserController.readUser(user, function(err, result) {
+
+        if (err) {
+            return res.json({error: err});
+        }
+
+        var response = {};
+        response.message = "success";
+        response.data = result;
+
+        res.send(response);
+    });
+});
+
+
 
 module.exports = router;
