@@ -6,11 +6,17 @@ function insertUser(user, callback) {
 
     console.log('user', user);
 
+    callback(null, user);
+}
+
+function readUser(user, callback) {
+
+    console.log('user', user);
 
     callback(null, user);
 }
 
-
 module.exports = {
-    insertUser: insertUser
+    insertUser: insertUser,
+    readUser: readUser
 };
