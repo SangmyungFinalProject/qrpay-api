@@ -15,12 +15,13 @@ router.post('/', function (req, res) {
     };
 
 
-    UserController.insertUser(user, function(err, result) {
+    UserController.insertUser(user, function (err, result) {
         if (err) {
             return res.json({error: err});
         }
 
         var response = {};
+        response.result = true;
         response.message = "success";
         response.data = result;
 
@@ -34,20 +35,20 @@ router.post('/login', function (req, res) {
         password: req.body.password
     };
 
-    UserController.readUser(user, function(err, result) {
+    UserController.readUser(user, function (err, result) {
 
         if (err) {
             return res.json({error: err});
         }
 
         var response = {};
+        response.result = true;
         response.message = "success";
         response.data = result;
 
         res.send(response);
     });
 });
-
 
 
 module.exports = router;
