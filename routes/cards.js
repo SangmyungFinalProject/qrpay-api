@@ -17,6 +17,7 @@ router.get('/:email', function (req, res, next) {
         }
 
         var response = {};
+        response.result = true;
         response.message = "success";
         response.data = result;
 
@@ -40,6 +41,7 @@ router.post('/', function (req, res) {
         }
 
         var response = {};
+        response.result = true;
         response.message = "success";
         response.data = result;
 
