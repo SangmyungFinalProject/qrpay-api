@@ -17,6 +17,6 @@ function readUser(user, callback) {
 }
 
 module.exports = {
-    insertUser: insertUser,
-    readUser: readUser
+    readUser: readUser,
+    insertUser: insertUser
 };
