@@ -8,18 +8,34 @@ function readCards(email, callback) {
 
     var cards = [];
     var card1 = {
-        number : '12344346',
-        cvc    : '123',
-        name   : 'asdg'
+        company: 'WOORI',
+        number : '5050-1234-4346-9101',
+        cvc    : '171',
+        name   : 'first card'
     };
-    cards.push(card1);
-
     var card2 = {
-        number : '12344346',
+        company: 'SHINHAN',
+        number : '1234-4346-1243-2389',
         cvc    : '123',
-        name   : 'asdg'
+        name   : 'second card'
     };
+    var card3 = {
+        company: 'SHINHAN',
+        number : '1234-4346-1243-2389',
+        cvc    : '133',
+        name   : 'third card'
+    };
+    var card4 = {
+        company: 'KB',
+        number : '1234-4346-1243-2389',
+        cvc    : '223',
+        name   : 'fourth card'
+    };
+
+    cards.push(card1);
     cards.push(card2);
+    cards.push(card3);
+    cards.push(card4);
 
     callback(null, cards);
 }
