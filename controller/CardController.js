@@ -1,41 +1,30 @@
-/**
- * Created by ms_20 on 2017. 5. 3..
- */
+var faker = require('faker');
+
+function generateRandomCardNumber() {
+
+    return (Math.floor(Math.random() * 5999) + 5000) +
+        '-' + (Math.floor(Math.random() * 9999) + 1000) +
+        '-' + (Math.floor(Math.random() * 9999) + 1000) +
+        '-' + (Math.floor(Math.random() * 9999) + 1000);
+}
 
 function readCards(email, callback) {
 
     console.log('user', email);
 
     var cards = [];
-    var card1 = {
-        company: 'WOORI',
-        number : '5050-1234-4346-9101',
-        cvc    : '171',
-        name   : 'first card'
-    };
-    var card2 = {
-        company: 'SHINHAN',
-        number : '1234-4346-1243-2389',
-        cvc    : '123',
-        name   : 'second card'
-    };
-    var card3 = {
-        company: 'SHINHAN',
-        number : '1234-4346-1243-2389',
-        cvc    : '133',
-        name   : 'third card'
-    };
-    var card4 = {
-        company: 'KB',
-        number : '1234-4346-1243-2389',
-        cvc    : '223',
-        name   : 'fourth card'
-    };
 
-    cards.push(card1);
-    cards.push(card2);
-    cards.push(card3);
-    cards.push(card4);
+    for (var i = 0; i < 22; i++) {
+        var card = {};
+        var randomCard = faker.helpers.createCard();
+        card.company = randomCard.company.name;
+        card.name = randomCard.name;
+        card.number = generateRandomCardNumber();
+        card.cvc = Math.floor(Math.random() * 999) + 100;
+
+        console.log('card : ', card);
+        cards.push(card);
+    }
 
     callback(null, cards);
 }
