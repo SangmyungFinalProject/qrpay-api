@@ -28,14 +28,18 @@ router.get('/:email', function (req, res, next) {
 router.post('/', function (req, res) {
 
     var card = {
-        email: req.body.email,
-        name: req.body.name,
         number: req.body.number,
-        cvc: req.body.cvc,
-        password: req.body.password
+        valid_date: req.body.date,
+        type: req.body.type,
+        cvc: req.body.cvc
     };
 
-    CardController.createCard(card, function (err, result) {
+    var userId = req.body.userId;
+
+    console.log('userId', userId);
+    console.log(card);
+
+    CardController.createCard(card, userId, function (err, result) {
         if (err) {
             return res.json({error: err});
         }
