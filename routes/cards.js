@@ -36,9 +36,6 @@ router.post('/', function (req, res) {
 
     var userId = req.body.userId;
 
-    console.log('userId', userId);
-    console.log(card);
-
     CardController.createCard(card, userId, function (err, result) {
         if (err) {
             return res.json({error: err});
