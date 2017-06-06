@@ -1,0 +1,16 @@
+{
+  "local": {
+   "host": "localhost",
+   "user": "root",
+   "port": 3306,
+   "password": "@cosin1210",
+   "database": "qrpay"
+  },
+  "server": {
+    "host": "",
+    "user": "",
+    "port": 0,
+    "password": "",
+    "database": ""
+  }
+}

@@ -5,8 +5,9 @@
 
 var express = require('express');
 var router = express.Router();
+var con = require('../db_con');
 
-var mysql = require('mysql');
+/*var mysql = require('mysql');
 
 var connection = mysql.createConnection({
     port: 3306,
@@ -14,21 +15,19 @@ var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '@cosin1210'
-});
+});*/
 
 function insertUser(user, callback) {
 
     console.log('user', user);
 
-    connection.query('insert into user_info set ?', user, function(error, result, fields) {
+    con.connection.query('insert into user_info set ?', user, function(error, result, fields) {
         if (error) {
-            console.log(error);
+            callback(error, result);
         } else {
-            console.log(result);
+            callback(null, user);
         }
     });
-
-    callback(null, user);
 }
 
 function readUser(user, callback) {
