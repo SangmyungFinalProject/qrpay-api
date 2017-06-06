@@ -1,39 +1,45 @@
-var faker = require('faker');
+var connection = require('../app').connection;
 
-function generateRandomCardNumber() {
 
-    return (Math.floor(Math.random() * 5999) + 5000) +
-        '-' + (Math.floor(Math.random() * 9999) + 1000) +
-        '-' + (Math.floor(Math.random() * 9999) + 1000) +
-        '-' + (Math.floor(Math.random() * 9999) + 1000);
+function readCards(userId, callback) {
+
+    console.log('userId', userId);
+
+    connection.query('select * from user_card_info where user_id = ?', userId, function (error, result) {
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+            callback(null, result);
+        }
+    });
 }
 
-function readCards(email, callback) {
-
-    console.log('user', email);
-
-    var cards = [];
-
-    for (var i = 0; i < 22; i++) {
-        var card = {};
-        var randomCard = faker.helpers.createCard();
-        card.company = randomCard.company.name;
-        card.name = randomCard.name;
-        card.number = generateRandomCardNumber();
-        card.cvc = Math.floor(Math.random() * 999) + 100;
-
-        console.log('card : ', card);
-        cards.push(card);
-    }
-
-    callback(null, cards);
-}
-
-function createCard(card, callback) {
+function createCard(card, userId, callback) {
 
     console.log('card', card);
 
-    callback(null, card);
+    connection.query('insert into card_info set ?', card, function(error, result) {
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+            console.log(result.insertId);
+            var userCardInfo = {
+                user_id: userId,
+                card_id: result.insertId
+            };
+            connection.query('insert into user_card_info set ?', userCardInfo, function(error, result) {
+                if(error) {
+                    console.log(error);
+                    callback(error);
+                } else {
+                    callback(null, result);
+                }
+            });
+
+        }
+    });
 }
 
 module.exports = {

@@ -1,7 +1,4 @@
-/**
- * Created by ms_20 on 2017. 5. 9..
- */
-
+var connection = require('../app').connection;
 
 function chargePay(pay, callback) {
 
