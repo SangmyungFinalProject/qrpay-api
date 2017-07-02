@@ -1,19 +1,31 @@
-/**
- * Created by woowahan on 2017. 5. 3..
- */
+var connection = require('../app').connection;
+
 
 function insertUser(user, callback) {
 
     console.log('user', user);
 
-    callback(null, user);
+    connection.query('insert into user_info set ?', user, function(error, result) {
+        if (error) {
+            callback(error, result);
+        } else {
+            callback(null, user);
+        }
+    });
 }
 
 function readUser(user, callback) {
 
-    console.log('user', user);
+    var userInfo = [user.email, user.password];
 
-    callback(null, user);
+    connection.query('select * from user_info where email = ? and password = ? ',userInfo, function (error, result) {
+       if (error) {
+           console.log(error);
+           callback(error);
+       } else {
+           callback(null, result);
+       }
+    });
 }
 
 module.exports = {

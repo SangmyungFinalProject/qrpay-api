@@ -10,10 +10,9 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res) {
     var user = {
         email: req.body.email,
-        nickname: req.body.nickname,
+        name: req.body.name,
         password: req.body.password
     };
-
 
     UserController.insertUser(user, function (err, result) {
         if (err) {
