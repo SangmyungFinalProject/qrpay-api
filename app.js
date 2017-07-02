@@ -32,6 +32,21 @@ app.use('/join', join);
 app.use('/cards', cards);
 app.use('/pay', pay);
 
+console.log(mysql);
+
+var connection = mysql.createConnection({
+    port: 3306,
+    database: 'qrpay',
+    host: '13.124.113.193',
+    user: 'root',
+    password: 'blaster1122'
+});
+
+console.log(connection);
+
+exports.connection = connection;
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -50,14 +65,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-var connection = mysql.createConnection({
-    port: 3306,
-    database: 'qrpay',
-    host: 'localhost',
-    user: 'root',
-    password: '@cosin1210'
-});
 
-exports.connection = connection;
 
 module.exports = app;
