@@ -1,4 +1,4 @@
-var connection = require('../app').connection;
+var connection = require('../app').app.connection;
 
 function chargePay(pay, callback) {
 
