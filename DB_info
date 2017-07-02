@@ -5,14 +5,14 @@ CREATE TABLE `card_info` (
   `valid_date` char(4) NOT NULL,
   `type` char(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `item_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `price` int(11) NOT NULL,
   `name` char(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pay_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -27,7 +27,7 @@ CREATE TABLE `pay_info` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `pay_info_ibfk_1` FOREIGN KEY (`card_id`) REFERENCES `card_info` (`id`),
   CONSTRAINT `pay_info_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_info` (
   `email` char(30) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE `user_info` (
   `password` char(20) NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pay_item_info` (
   `pay_id` int(11) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE `pay_item_info` (
   KEY `item_id` (`item_id`),
   CONSTRAINT `pay_item_info_ibfk_1` FOREIGN KEY (`pay_id`) REFERENCES `pay_info` (`id`),
   CONSTRAINT `pay_item_info_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `item_info` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_card_info` (
   `user_id` int(11) NOT NULL,
@@ -53,4 +53,4 @@ CREATE TABLE `user_card_info` (
   KEY `user_card_info_ibfk_2` (`card_id`),
   CONSTRAINT `user_card_info_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_card_info_ibfk_2` FOREIGN KEY (`card_id`) REFERENCES `card_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

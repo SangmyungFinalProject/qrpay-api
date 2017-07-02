@@ -53,9 +53,9 @@ app.use(function(err, req, res, next) {
 var connection = mysql.createConnection({
     port: 3306,
     database: 'qrpay',
-    host: 'localhost',
+    host: '13.124.113.193',
     user: 'root',
-    password: '@cosin1210'
+    password: 'blaster1122'
 });
 
 exports.connection = connection;
