@@ -1,5 +1,20 @@
+<<<<<<< HEAD
 var app = require('./../app');
 var connection = app.connection;
+=======
+/*var app = require('./../app');
+var connection = app.connection;*/
+
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+    port: 3306,
+    database: 'qrpay',
+    host: 'localhost',
+    user: 'root',
+    password: '@cosin1210'
+});
+>>>>>>> API(결제, 결제 취소, 결제 목록, 카드 삭제) 초안 작성)
 
 function insertUser(user, callback) {
 
