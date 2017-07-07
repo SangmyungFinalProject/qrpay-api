@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
+//var mysql = require('mysql');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -32,9 +32,7 @@ app.use('/join', join);
 app.use('/cards', cards);
 app.use('/pay', pay);
 
-console.log(mysql);
-
-var connection = mysql.createConnection({
+/*var connection = mysql.createConnection({
     port: 3306,
     database: 'qrpay',
     host: '13.124.113.193',
@@ -42,9 +40,7 @@ var connection = mysql.createConnection({
     password: 'blaster1122'
 });
 
-console.log(connection);
-
-exports.connection = connection;
+exports.connection = connection;*/
 
 
 // catch 404 and forward to error handler

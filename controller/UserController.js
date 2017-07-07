@@ -1,5 +1,15 @@
-var connection = require('../app').app.connection;
+/*var app = require('./../app');
+var connection = app.connection;*/
 
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+    port: 3306,
+    database: 'qrpay',
+    host: 'localhost',
+    user: 'root',
+    password: '@cosin1210'
+});
 
 function insertUser(user, callback) {
 

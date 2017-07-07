@@ -1,5 +1,15 @@
-var connection = require('../app').app.connection;
+/*var app = require('./../app');
+var connection = app.connection;*/
 
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+    port: 3306,
+    database: 'qrpay',
+    host: 'localhost',
+    user: 'root',
+    password: '@cosin1210'
+});
 
 function readCards(userId, callback) {
 
@@ -42,7 +52,30 @@ function createCard(card, userId, callback) {
     });
 }
 
+function deleteCard(card_id, callback) {
+
+    console.log('card_id', card_id);
+
+    connection.query('delete from card_info where id = ?', card_id, function(error) {
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+            connection.query('delete from user_card_info where card_id = ?', card_id, function(error, result) {
+                if(error) {
+                    console.log(error);
+                    callback(error);
+                } else {
+                    callback(null, result);
+                }
+            });
+
+        }
+    });
+}
+
 module.exports = {
     readCards: readCards,
-    createCard: createCard
+    createCard: createCard,
+    deleteCard: deleteCard
 };
