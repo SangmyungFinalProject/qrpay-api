@@ -8,19 +8,18 @@ var PayController = require('../controller/PayController');
 
 router.post('/', function (req, res) {
 
-    var card = {
-        //email: req.body.email,
-        //name: req.body.name,
-        number: req.body.number,
-        cvc: req.body.cvc,
-        //password: req.body.password,
-        //money: req.body.money
-        price: req.body.price,
-        time: req.body.time,
-        company: req.body.company
+    var ID = {
+        card_id: req.body.card_id,
+        item_id: req.body.item_id,
+        user_id: req.body.user_id
     };
 
-    PayController.chargePay(card, function (err, result) {
+    var pay = {
+        price_of_all: req.body.price_of_all,
+        time_of_pay: req.body.time_of_pay
+    };
+
+    PayController.chargePay(ID, pay, function (err, result) {
         if (err) {
             return res.json({error: err});
         }
@@ -36,16 +35,27 @@ router.post('/', function (req, res) {
 
 router.post('/cancel', function (req, res) {
 
-    var card = {
-        email: req.body.email,
-        name: req.body.name,
-        number: req.body.number,
-        cvc: req.body.cvc,
-        password: req.body.password,
-        money: req.body.money
-    };
+    var pay_id = req.body.pay_id;
 
-    PayController.cancelPay(card, function (err, result) {
+    PayController.cancelPay(pay_id, function (err, result) {
+        if (err) {
+            return res.json({error: err});
+        }
+
+        var response = {};
+        response.result = true;
+        response.message = "success";
+        response.data = result;
+
+        res.send(response);
+    });
+});
+
+router.post('/list', function (req, res) {
+
+    var card_id = req.body.card_id;
+
+    PayController.payList(card_id, function (err, result) {
         if (err) {
             return res.json({error: err});
         }

@@ -6,13 +6,19 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var join = require('./routes/join');
-var cards = require('./routes/cards');
-var pay = require('./routes/pay');
-
 var app = express();
+
+var connection = mysql.createPool({
+    connectionLimit: 40,
+    acquireTimeout: 30000,
+    port: 3306,
+    database: 'qrpay',
+    host: '127.0.0.1',
+    user: 'root',
+    password: '@cosin1210'
+});
+
+console.log('connection', connection);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,38 +32,60 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+exports.connection = connection;
+
+var index = require('./routes/index');
+var users = require('./routes/users');
+var join = require('./routes/join');
+var cards = require('./routes/cards');
+var pay = require('./routes/pay');
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/join', join);
 app.use('/cards', cards);
 app.use('/pay', pay);
 
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
-var connection = mysql.createConnection({
-    port: 3306,
-    database: 'qrpay',
-    host: '13.124.113.193',
-    user: 'root',
-    password: 'blaster1122'
-});
 
-exports.connection = connection;
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
 
 module.exports = app;

@@ -51,4 +51,23 @@ router.post('/', function (req, res) {
 
 });
 
+router.post('/delete', function (req, res) {
+
+    var card_id = req.body.card_id;
+
+    CardController.deleteCard(card_id, function (err, result) {
+        if (err) {
+            return res.json({error: err});
+        }
+
+        var response = {};
+        response.result = true;
+        response.message = "success";
+        response.data = result;
+
+        res.send(response);
+    });
+
+});
+
 module.exports = router;

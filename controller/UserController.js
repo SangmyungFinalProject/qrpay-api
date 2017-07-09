@@ -1,9 +1,11 @@
-var connection = require('../app').connection;
-
+var app = require('./../app');
+var connection = app.connection;
 
 function insertUser(user, callback) {
 
     console.log('user', user);
+
+    console.log('connection', connection);
 
     connection.query('insert into user_info set ?', user, function(error, result) {
         if (error) {
