@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-//var mysql = require('mysql');
+var mysql = require('mysql');
 
 var app = express();
 
@@ -65,7 +65,6 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-// error handlers
 
 // development error handler
 // will print stacktrace
