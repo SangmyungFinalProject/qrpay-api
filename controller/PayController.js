@@ -1,52 +1,26 @@
-<<<<<<< HEAD
 var app = require('./../app');
 var connection = app.connection;
 
-function chargePay(ID, pay, callback) {
+function chargePay(info, callback) {
 
-=======
-/*var app = require('./../app');
-var connection = app.connection;*/
+    console.log(info);
 
-var mysql = require('mysql');
+    var user_id = info.user_id;
+    var card_id = info.card_id;
+    var item_id = info.item_id;
+    var total_price = info.total_price;
 
-var connection = mysql.createConnection({
-    port: 3306,
-    database: 'qrpay',
-    host: 'localhost',
-    user: 'root',
-    password: '@cosin1210'
-});
+    var pay_set = [total_price, card_id, user_id, item_id];
 
-function chargePay(ID, pay, callback) {
-
->>>>>>> API(결제, 결제 취소, 결제 목록, 카드 삭제) 초안 작성)
-    console.log(ID);
-
-    console.log('pay', pay);
-
-    ID.user_id = Number(ID.user_id);
-    ID.card_id = Number(ID.card_id);
-    ID.item_id = Number(ID.item_id);
-
-    pay.price_of_all = Number(pay.price_of_all);
-
-    var user_id = ID.user_id;
-    var card_id = ID.card_id;
-    var price_of_all = pay.price_of_all;
-    var time_of_pay = pay.time_of_pay;
-
-    var pay_set = [ID.user_id, ID.card_id, pay];
-
-    connection.query('insert into pay_info (user_id, card_id, price_of_all, time_of_pay) ' +
-                    'values (user_id, card_id, price_of_all, time_of_pay)', function(error, result) {
+    connection.query('insert into pay_info (total_price, card_id, user_id, item_id) values (?, ?, ?, ?)',
+                    pay_set, function(error, result) {
         if (error) {
             console.log(error);
             callback(error);
         } else {
             console.log(result.insertId);
             var payItemInfo = {
-                item_id: ID.item_id,
+                item_id: info.item_id,
                 pay_id: result.insertId
             };
             connection.query('insert into pay_item_info set ?', payItemInfo, function(error, result) {
@@ -61,7 +35,6 @@ function chargePay(ID, pay, callback) {
         }
     });
 
-    //callback(null, pay);
 }
 
 function cancelPay(pay_id, callback) {
@@ -79,7 +52,6 @@ function cancelPay(pay_id, callback) {
         }
     });
 
-    //callback(null, pay);
 }
 
 function payList(card_id, callback) {
@@ -95,12 +67,17 @@ function payList(card_id, callback) {
         } else {
             console.log(result);
 
-            var pay_id = [result.insertId];
+            var pay_ids = [];
 
-            console.log(pay_id);
+            var length = result.length;
 
-            connection.query('select * from pay_item_info where pay_id = ?', pay_id, function(error, result) {
-                if(error) {
+            for (var i = 0 ; i < length ; i ++) {
+                pay_ids.push(result[i].id);
+            }
+            console.log('pay_ids', pay_ids);
+
+            connection.query('select * from pay_item_info where pay_id in (?)', pay_ids, function(error, result) {
+                if (error) {
                     console.log(error);
                     callback(error);
                 } else {
@@ -110,7 +87,6 @@ function payList(card_id, callback) {
         }
     });
 
-    //callback(null, pay);
 }
 
 module.exports = {
