@@ -16,8 +16,8 @@ CREATE TABLE `item_info` (
 
 CREATE TABLE `pay_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `price` int(11) NOT NULL,
-  `time` date NOT NULL,
+  `total_price` int(11) NOT NULL,
+  `time_of_pay` TIMESTAMP NOT NULL default CURRENT_TIMESTAMP,
   `shop_id` int(11) DEFAULT '1',
   `card_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,

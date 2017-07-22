@@ -1,7 +1,6 @@
 var app = require('./../app');
 var connection = app.connection;
 
-
 function readCards(userId, callback) {
 
     console.log('userId', userId);

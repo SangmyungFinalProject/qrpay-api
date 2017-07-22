@@ -8,18 +8,14 @@ var PayController = require('../controller/PayController');
 
 router.post('/', function (req, res) {
 
-    var ID = {
-        card_id: req.body.card_id,
-        item_id: req.body.item_id,
-        user_id: req.body.user_id
+    var info = {
+        card_id: Number(req.body.card_id),
+        item_id: Number(req.body.item_id),
+        user_id: Number(req.body.user_id),
+        total_price: Number(req.body.total_price)
     };
 
-    var pay = {
-        price_of_all: req.body.price_of_all,
-        time_of_pay: req.body.time_of_pay
-    };
-
-    PayController.chargePay(ID, pay, function (err, result) {
+    PayController.chargePay(info, function (err, result) {
         if (err) {
             return res.json({error: err});
         }

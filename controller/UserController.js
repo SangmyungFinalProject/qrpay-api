@@ -20,7 +20,7 @@ function readUser(user, callback) {
 
     var userInfo = [user.email, user.password];
 
-    connection.query('select * from user_info where email = ? and password = ? ',userInfo, function (error, result) {
+    connection.query('select * from user_info where email = ? and password = ? ', userInfo, function (error, result) {
        if (error) {
            console.log(error);
            callback(error);
