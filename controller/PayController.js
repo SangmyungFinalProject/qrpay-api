@@ -56,11 +56,13 @@ function cancelPay(pay_id, callback) {
 
 function payList(card_id, callback) {
 
-    card_id = Number(card_id);
+    var params = [
+        card_id = Number(card_id)
+    ];
 
     console.log('card_id', card_id);
 
-    connection.query('select id from pay_info where card_id = ?', card_id, function(error, result) {
+    connection.query('select id from pay_info where card_id = ?', params, function(error, result) {
         if(error) {
             console.log(error);
             callback(error);
@@ -72,11 +74,16 @@ function payList(card_id, callback) {
             var length = result.length;
 
             for (var i = 0 ; i < length ; i ++) {
+                Number(result[i].id);
                 pay_ids.push(result[i].id);
             }
             console.log('pay_ids', pay_ids);
 
-            connection.query('select * from pay_item_info where pay_id in (?)', pay_ids, function(error, result) {
+            var params = [
+                pay_ids
+            ];
+
+            connection.query('select * from pay_item_info where pay_id in (?)', params, function(error, result) {
                 if (error) {
                     console.log(error);
                     callback(error);
@@ -86,7 +93,6 @@ function payList(card_id, callback) {
             });
         }
     });
-
 }
 
 module.exports = {
