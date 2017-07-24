@@ -49,5 +49,41 @@ router.post('/login', function (req, res) {
     });
 });
 
+router.post('/delete', function (req, res) {
+
+    var user_id = req.body.user_id;
+
+    UserController.deleteUser(user_id, function (err, result) {
+        if (err) {
+            return res.json({error: err});
+        }
+
+        var response = {};
+        response.result = true;
+        response.message = "success";
+        response.data = result;
+
+        res.send(response);
+    });
+});
+
+router.get('/:email', function (req, res, next) {
+
+    var email = req.params.email;
+
+    console.log('email', email);
+    UserController.readUser(email, function (err, result) {
+        if (err) {
+            return res.json({error: err});
+        }
+
+        var response = {};
+        response.result = true;
+        response.message = "success";
+        response.data = result;
+
+        res.send(response);
+    });
+});
 
 module.exports = router;
