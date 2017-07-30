@@ -19,15 +19,15 @@ function createCard(card, userId, callback) {
 
     console.log('card', card);
 
-    connection.query('insert into card_info set ?', card, function(error, rows) {
+    connection.query('insert into card_info set ?', card, function(error, result) {
         if (error) {
             console.log(error);
             callback(error);
         } else {
-            console.log(rows[0].insertId);
+            console.log(result.insertId);
             var userCardInfo = {
                 user_id: userId,
-                card_id: rows[0].insertId
+                card_id: result.insertId
             };
             connection.query('insert into user_card_info set ?', userCardInfo, function(error, result) {
                 if(error) {
