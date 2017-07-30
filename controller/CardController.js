@@ -19,22 +19,23 @@ function createCard(card, userId, callback) {
 
     console.log('card', card);
 
-    connection.query('insert into card_info set ?', card, function(error, result) {
+    connection.query('insert into card_info set ?', card, function(error, rows) {
         if (error) {
             console.log(error);
             callback(error);
         } else {
-            console.log(result.insertId);
+            console.log(rows[0].insertId);
             var userCardInfo = {
                 user_id: userId,
-                card_id: result.insertId
+                card_id: rows[0].insertId
             };
             connection.query('insert into user_card_info set ?', userCardInfo, function(error, result) {
                 if(error) {
                     console.log(error);
                     callback(error);
                 } else {
-                    callback(null, result);
+                    card.card_id = userCardInfo.card_id;
+                    callback(null, card);
                 }
             });
 
