@@ -38,6 +38,7 @@ function readUser(user, callback) {
            callback(error);
        } else {
            var result = {};
+           result.userId = rows[0].id;
            result.email = rows[0].email;
            result.name = rows[0].name;
            callback(null, result);
