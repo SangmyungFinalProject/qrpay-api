@@ -10,6 +10,7 @@ function readCards(userId, callback) {
             console.log(error);
             callback(error);
         } else {
+            console.log('result : ', result);
             callback(null, result);
         }
     });
