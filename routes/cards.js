@@ -6,12 +6,12 @@ var router = express.Router();
 var CardController = require('../controller/CardController');
 
 /* GET card list. */
-router.get('/:email', function (req, res, next) {
+router.get('/:userId', function (req, res, next) {
 
-    var email = req.params.email;
+    var userId = req.params.userId;
 
-    console.log('email', email);
-    CardController.readCards(email, function (err, result) {
+    console.log('userId', userId);
+    CardController.readCards(userId, function (err, result) {
         if (err) {
             return res.json({error: err});
         }
