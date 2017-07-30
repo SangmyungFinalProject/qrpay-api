@@ -29,9 +29,9 @@ router.post('/', function (req, res) {
 
     var card = {
         number: req.body.number,
+        cvc: req.body.cvc,
         valid_date: req.body.date,
-        type: req.body.type,
-        cvc: req.body.cvc
+        type: req.body.type
     };
 
     var userId = req.body.userId;
