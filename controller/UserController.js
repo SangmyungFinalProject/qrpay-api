@@ -32,11 +32,14 @@ function insertUser(user, callback) {
 function readUser(user, callback) {
 
     var userInfo = [user.email, user.password];
-    connection.query('select * from user_info where email = ? and password = ? order by id asc limit 1', userInfo, function (error, result) {
+    connection.query('select * from user_info where email = ? and password = ? order by id asc limit 1', userInfo, function (error, rows) {
        if (error) {
            console.log(error);
            callback(error);
        } else {
+           var result = {};
+           result.email = rows[0].email;
+           result.name = rows[0].name;
            callback(null, result);
        }
     });
