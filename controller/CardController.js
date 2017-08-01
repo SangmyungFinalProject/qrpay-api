@@ -5,13 +5,32 @@ function readCards(userId, callback) {
 
     console.log('userId', userId);
 
-    connection.query('select * from user_card_info where user_id = ?', userId, function (error, result) {
+    connection.query('select * from user_card_info where user_id = ?', userId, function (error, rows) {
         if (error) {
             console.log(error);
             callback(error);
         } else {
-            console.log('result : ', result);
-            callback(null, result);
+
+            var cards = [];
+            rows.forEach(function (row) {
+                cards.push(row.card_id);
+            });
+
+            console.log('cards : ', cards);
+
+            var params = [cards];
+
+            connection.query('select * from card_info where id in (?)', params, function (error, result) {
+                if (error) {
+                    console.log(error);
+                    callback(error);
+                } else {
+
+                    console.log('result : ', result);
+                    callback(null, result);
+                }
+            });
+
         }
     });
 }
