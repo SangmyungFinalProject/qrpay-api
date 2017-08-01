@@ -18,8 +18,6 @@ var connection = mysql.createPool({
     password: 'blaster1122'
 });
 
-console.log('connection', connection);
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
