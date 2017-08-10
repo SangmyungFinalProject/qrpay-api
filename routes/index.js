@@ -3,9 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
-  var testUrl = 'sbca://1';
-  res.redirect(301, testUrl);
+  res.send('hello');
 });
 
 module.exports = router;
