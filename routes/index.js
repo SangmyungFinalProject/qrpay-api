@@ -4,7 +4,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-  var testUrl = 'sbca://categoryCode';
+  var testUrl = 'sbca://1';
   res.redirect(301, testUrl);
 });
 
