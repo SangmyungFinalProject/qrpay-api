@@ -1,3 +1,24 @@
+CREATE TABLE `user_info` (
+  `email` char(30) NOT NULL,
+  `name` char(20) NOT NULL,
+  `password` char(20) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `card_company_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` char(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `item_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `price` int(11) NOT NULL,
+  `name` char(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `card_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` char(20) NOT NULL,
@@ -10,12 +31,6 @@ CREATE TABLE `card_info` (
   CONSTRAINT `card_info_ibfk_1` FOREIGN KEY (`company`) REFERENCES `card_company_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `item_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `price` int(11) NOT NULL,
-  `name` char(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pay_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -31,14 +46,6 @@ CREATE TABLE `pay_info` (
   CONSTRAINT `pay_info_ibfk_1` FOREIGN KEY (`card_id`) REFERENCES `card_info` (`id`),
   CONSTRAINT `pay_info_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `user_info` (
-  `email` char(30) NOT NULL,
-  `name` char(20) NOT NULL,
-  `password` char(20) NOT NULL,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pay_item_info` (
   `pay_id` int(11) NOT NULL,
@@ -58,8 +65,3 @@ CREATE TABLE `user_card_info` (
   CONSTRAINT `user_card_info_ibfk_2` FOREIGN KEY (`card_id`) REFERENCES `card_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `card_company_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` char(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
