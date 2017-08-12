@@ -12,7 +12,6 @@ function insertUser(user, callback) {
 
     console.log('connection', connection);
 
-
     email_check(user.email, function(result) {
         if(result) {
             connection.query('insert into user_info set ?', user, function (error, result) {

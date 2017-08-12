@@ -67,7 +67,7 @@ router.post('/delete', function (req, res) {
     });
 });
 
-router.get('/:email', function (req, res, next) {
+/*router.get('/:email', function (req, res, next) {
 
     var email = req.params.email;
 
@@ -84,6 +84,6 @@ router.get('/:email', function (req, res, next) {
 
         res.send(response);
     });
-});
+});*/
 
 module.exports = router;
