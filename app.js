@@ -5,8 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
-
+var os = require('os');
 var app = express();
+
+var host = os.hostname();
 
 var connection = mysql.createPool({
     connectionLimit: 40,
@@ -17,6 +19,18 @@ var connection = mysql.createPool({
     user: 'root',
     password: 'blaster1122'
 });
+
+if (host === 'MS-20ui-MacBook-Pro.local') {
+    connection = mysql.createPool({
+        connectionLimit: 40,
+        acquireTimeout: 30000,
+        port: 3306,
+        database: 'qrpay',
+        host: 'localhost',
+        user: 'root',
+        password: '@cosin1210'
+    });
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
