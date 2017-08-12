@@ -49,22 +49,20 @@ function createCard(card, userId, callback) {
                     callback(error);
                 } else {
                     if (rows.length > 0) {
-
-                        // insert user_card_info
-
                         var userCardInfo = {
-                            user_id: userId,
+                            user_id: Number(userId),
                             card_id: rows[0].id
                         };
-                        connection.query('insert into user_card_info set ?', userCardInfo, function (error, result) {
+
+                        var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
+                        connection.query(query, [userCardInfo.user_id, userCardInfo.card_id], function (error, result) {
                             if (error) {
                                 console.log(error);
                                 callback(error);
                             } else {
-                                callback(null, result);
+                                callback(null, card);
                             }
                         });
-
                     } else {
                         connection.query('insert into card_info set ?', card, function (error, result) {
                             if (error) {
@@ -76,12 +74,14 @@ function createCard(card, userId, callback) {
                                     user_id: userId,
                                     card_id: result.insertId
                                 };
-                                connection.query('insert into user_card_info set ?', userCardInfo, function (error, result) {
+
+                                var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
+                                connection.query(query, [userCardInfo.user_id, userCardInfo.card_id], function (error, result) {
                                     if (error) {
                                         console.log(error);
                                         callback(error);
                                     } else {
-                                        callback(null, result);
+                                        callback(null, card);
                                     }
                                 });
                             }
