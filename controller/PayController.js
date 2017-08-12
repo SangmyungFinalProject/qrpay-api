@@ -18,7 +18,7 @@ function chargePay(info, callback) {
             console.log(error);
             callback(error);
         } else {
-            console.log(result.insertId);
+            console.log('pay_id', result.insertId);
             var payItemInfo = {
                 item_id: info.item_id,
                 pay_id: result.insertId
@@ -28,7 +28,7 @@ function chargePay(info, callback) {
                     console.log(error);
                     callback(error);
                 } else {
-                    callback(null, result);
+                    callback(null, payItemInfo);
                 }
             });
 
@@ -43,12 +43,17 @@ function cancelPay(pay_id, callback) {
 
     console.log('pay_id', pay_id);
 
-    connection.query('update pay_info set cancel = 1 where id = ?', pay_id, function(error, result) {
-        if(error) {
+    connection.query('update pay_info set cancel = 1 where id = ? and cancel = 0', pay_id, function(error, result) {
+        if (error) {
             console.log(error);
             callback(error);
         } else {
-            callback(null, result);
+            if(result.affectedRows.length > 0) {
+                callback(null, result);
+            } else { //-> 처리가 되면 0 이상, 처리가 되지 않으면 0
+                var err = 'already cancel';
+                callback(err);
+            }
         }
     });
 
@@ -63,7 +68,7 @@ function payList(card_id, callback) {
     console.log('card_id', card_id);
 
     connection.query('select id from pay_info where card_id = ?', params, function(error, result) {
-        if(error) {
+        if (error) {
             console.log(error);
             callback(error);
         } else {
@@ -79,9 +84,7 @@ function payList(card_id, callback) {
             }
             console.log('pay_ids', pay_ids);
 
-            var params = [
-                pay_ids
-            ];
+            var params = [pay_ids];
 
             connection.query('select * from pay_item_info where pay_id in (?)', params, function(error, result) {
                 if (error) {

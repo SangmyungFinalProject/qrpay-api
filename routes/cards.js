@@ -67,7 +67,31 @@ router.post('/delete', function (req, res) {
 
         res.send(response);
     });
+});
 
+router.post('/update', function (req, res) {
+
+    var card_id = req.body.card_id;
+
+    var card = {
+        number: req.body.number,
+        cvc: req.body.cvc,
+        valid_date: req.body.date,
+        type: req.body.type
+    };
+
+    CardController.updateCard(card, card_id, function (err, result) {
+        if (err) {
+            return res.json({error: err});
+        }
+
+        var response = {};
+        response.result = true;
+        response.message = "success";
+        response.data = result;
+
+        res.send(response);
+    });
 });
 
 module.exports = router;
