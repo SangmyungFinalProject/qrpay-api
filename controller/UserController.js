@@ -36,11 +36,16 @@ function readUser(user, callback) {
            console.log(error);
            callback(error);
        } else {
-           var result = {};
-           result.userId = rows[0].id;
-           result.email = rows[0].email;
-           result.name = rows[0].name;
-           callback(null, result);
+           if(rows.length > 0) {
+               var result = {};
+               result.userId = rows[0].id;
+               result.email = rows[0].email;
+               result.name = rows[0].name;
+               callback(null, result);
+           } else {
+               var error = 'only signed - up user can login';
+               callback(error);
+           }
        }
     });
 }
