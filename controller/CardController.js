@@ -1,9 +1,10 @@
 var app = require('./../app');
 var connection = app.connection;
 
-function card_check(card, callback) {
-    var regex = /^(?:(94[0-9]{14})|(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$/i;
-    callback(regex.test(card));
+function card_check(cardNumber, callback) {
+    cardNumber = cardNumber.replace(/[ -]/g,'');
+    var regex = /^(?:(94[0-9]{14})|(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$/;
+    callback(regex.exec(cardNumber));
 }
 
 function readCards(userId, callback) {
