@@ -25,24 +25,6 @@ router.get('/:userId', function (req, res, next) {
     });
 });
 
-router.get('/', function (req, res, next) {
-
-    console.log('get user : ', req.user.user_id);
-
-    CardController.readCards(req.user.user_id, function (err, result) {
-        if (err) {
-            return res.json({error: err});
-        }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
-    });
-});
-
 router.post('/', function (req, res) {
 
     var card = {

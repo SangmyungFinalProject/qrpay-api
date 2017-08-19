@@ -3,6 +3,7 @@ var router = express.Router();
 var UserController = require('../controller/UserController');
 
 router.get('/', function (req, res) {
+
     UserController.readAllUser(function (err, result) {
         if(err) {
             res.json({error:err});
@@ -11,9 +12,12 @@ router.get('/', function (req, res) {
             response.result = true;
             response.message = "success";
             response.data = result;
+
             res.send(response);
         }
+
     });
+
 });
 
 module.exports = router;
