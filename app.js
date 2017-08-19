@@ -6,6 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var os = require('os');
+var passport = require('passport'); //passport module add // 9 ~ 12 new
+var cookieSession = require('cookie-session');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
+var flash = require('connect-flash');
+var redis = require('redis');
 var app = express();
 
 var host = os.hostname();
@@ -32,6 +38,8 @@ if (host === 'MS-20ui-MacBook-Pro.local') {
     });
 }
 
+var redisClient = redis.createClient({host : 'localhost', port : 6379});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -42,7 +50,23 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(session({
+    store: new RedisStore({client: redisClient}),
+    keys: ['user-session'],
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 30 // 유효기간 한달
+    },
+    secret : 'qrpay',
+    saveUninitialized: true, // saved new sessions
+    resave: false
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 exports.connection = connection;
 
@@ -57,7 +81,6 @@ app.use('/users', users);
 app.use('/join', join);
 app.use('/cards', cards);
 app.use('/pay', pay);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
