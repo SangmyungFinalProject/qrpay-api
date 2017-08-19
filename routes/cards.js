@@ -38,14 +38,15 @@ router.post('/', function (req, res) {
     var userId = req.body.userId;
 
     CardController.createCard(card, userId, function (err, result) {
-        if (err) {
-            return res.json({error: err});
-        }
-
         var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
+        if (result) {
+            response.result = true;
+            response.message = "success";
+            response.data = result;
+        } else {
+            response.result = false;
+            response.message = err;
+        }
 
         res.send(response);
     });
