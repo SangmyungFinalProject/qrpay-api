@@ -2,7 +2,7 @@ var app = require('./../app');
 var connection = app.connection;
 
 function card_check(cardNumber, callback) {
-    cardNumber = cardNumber.replace(/[ -]/g,'');
+    cardNumber = cardNumber.replace(/[ -]/g, '');
     var regex = /^(?:(94[0-9]{14})|(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$/;
     callback(regex.exec(cardNumber));
 }
@@ -69,25 +69,36 @@ function createCard(card, userId, callback) {
                             }
                         });
                     } else {
-                        connection.query('insert into card_info set ?', card, function (error, result) {
+
+                        connection.query('select id from card_company_info where name = ?', card.company, function (error, result) {
                             if (error) {
                                 console.log(error);
                                 callback(error);
                             } else {
-                                console.log(result.insertId);
-                                var userCardInfo = {
-                                    user_id: userId,
-                                    card_id: result.insertId
-                                };
 
-                                var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
-                                connection.query(query, [userCardInfo.user_id, userCardInfo.card_id], function (error, result) {
+                                card.company = result[0].id;
+                                connection.query('insert into card_info set ?', card, function (error, result) {
                                     if (error) {
                                         console.log(error);
                                         callback(error);
                                     } else {
-                                        callback(null, card);
+                                        console.log(result.insertId);
+                                        var userCardInfo = {
+                                            user_id: userId,
+                                            card_id: result.insertId
+                                        };
+
+                                        var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
+                                        connection.query(query, [userCardInfo.user_id, userCardInfo.card_id], function (error, result) {
+                                            if (error) {
+                                                console.log(error);
+                                                callback(error);
+                                            } else {
+                                                callback(null, card);
+                                            }
+                                        });
                                     }
+
                                 });
                             }
                         });
