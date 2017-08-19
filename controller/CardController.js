@@ -22,6 +22,10 @@ function readCards(userId, callback) {
 
             console.log('cards : ', cards);
 
+            if (cards.length <= 0) {
+                return callback(null, cards);
+            }
+
             var params = [cards];
 
             connection.query('select * from card_info where id in (?)', params, function (error, result) {
