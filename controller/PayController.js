@@ -12,8 +12,8 @@ function chargePay(info, callback) {
 
     var pay_set = [total_price, card_id, user_id, item_id];
 
-    connection.query('insert into pay_info (total_price, card_id, user_id, item_id) values (?, ?, ?, ?)',
-                    pay_set, function(error, result) {
+    connection.query('insert into pay_info (total_price, card_id, user_id, item_id) values (?)',
+                    [pay_set], function(error, result) {
         if (error) {
             console.log(error);
             callback(error);
@@ -24,7 +24,7 @@ function chargePay(info, callback) {
                 pay_id: result.insertId
             };
 
-            var query = 'insert into user_card_info set pay_id = (select id from pay_info where id = ?), item_id = (select id from item_info where id = ?)';
+            var query = 'insert into pay_item_info set pay_id = (select id from pay_info where id = ?), item_id = (select id from item_info where id = ?)';
 
             connection.query(query, [payItemInfo.pay_id, payItemInfo.item_id], function(error, result) {
                 if(error) {
