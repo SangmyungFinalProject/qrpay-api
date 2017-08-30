@@ -17,7 +17,11 @@ router.post('/', function (req, res) {
 
     PayController.chargePay(info, function (err, result) {
         if (err) {
-            return res.json({error: err});
+            var errInfo = [];
+            errInfo[0] = 'fail';
+            errInfo[1] = err.errno;
+
+            return res.send(errInfo);
         }
 
         var response = {};
