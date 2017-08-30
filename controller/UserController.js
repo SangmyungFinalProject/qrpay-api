@@ -1,7 +1,7 @@
 var app = require('./../app');
 var connection = app.connection;
 
-function email_check(email, callback) {
+function emailValidate(email, callback) {
     var regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     callback(regex.test(email));
 }
@@ -12,7 +12,7 @@ function insertUser(user, callback) {
 
     console.log('connection', connection);
 
-    email_check(user.email, function(result) {
+    emailValidate(user.email, function(result) {
         if(result) {
             connection.query('insert into user_info set ?', user, function (error, result) {
                 if (error) {
