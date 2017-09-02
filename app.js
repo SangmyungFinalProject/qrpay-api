@@ -87,8 +87,6 @@ app.use(session(
 ));
 
 
-
-
 // 로그인 성공 시 유저 정보 저장
 passport.serializeUser(function (user, done) {
     console.log('serialize : ' + JSON.stringify(user));
@@ -116,12 +114,16 @@ var users = require('./routes/users');
 var join = require('./routes/join');
 var cards = require('./routes/cards');
 var pay = require('./routes/pay');
+var token = require('./routes/token');
+var push = require('./routes/push');
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/join', join);
 app.use('/cards', cards);
 app.use('/pay', pay);
+app.use('/token', token);
+app.use('/push', push);
 
 
 // catch 404 and forward to error handler
