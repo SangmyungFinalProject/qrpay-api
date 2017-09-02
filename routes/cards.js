@@ -32,7 +32,8 @@ router.post('/', function (req, res) {
         cvc: req.body.cvc,
         valid_date: req.body.date,
         type: req.body.type,
-        company: req.body.company
+        company: req.body.company,
+        limit: req.body.limit
     };
 
     var userId = req.body.userId;
@@ -79,7 +80,8 @@ router.post('/update', function (req, res) {
         number: req.body.number,
         cvc: req.body.cvc,
         valid_date: req.body.date,
-        type: req.body.type
+        type: req.body.type,
+        company: req.body.company
     };
 
     CardController.updateCard(card, card_id, function (err, result) {

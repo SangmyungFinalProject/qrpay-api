@@ -15,9 +15,7 @@ router.post('/', function (req, res) {
         total_price: Number(req.body.total_price)
     };
 
-    var push_token = req.body.push_token;
-
-    PayController.chargePay(payInfo, push_token, function (err, result) {
+    PayController.chargePay(payInfo, function (err, result) {
         if (err) {
             var errInfo = [];
             errInfo[0] = 'fail';

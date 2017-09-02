@@ -70,7 +70,7 @@ function createCard(card, userId, callback) {
                         });
                     } else {
 
-                        connection.query('select id from card_company_info where name = ?', card.company, function (error, result) {
+                        connection.query('select id from card_company_info where id = ?', card.company, function (error, result) {
                             if (error) {
                                 console.log(error);
                                 callback(error);
