@@ -1,5 +1,6 @@
 var app = require('./../app');
 var connection = app.connection;
+var PushController = require('../CardController');
 
 function chargePay(info, callback) {
 
@@ -31,13 +32,20 @@ function chargePay(info, callback) {
                     console.log(error);
                     callback(error);
                 } else {
+                    PushController.sendPush(token, pay_set.total_price, function (err, result) {
+                        if (err)
+                        {
+                            console.log(err);
+                            callback(err);
+                        } else {
+
+                        }
+                    });
                     callback(null, payItemInfo);
                 }
             });
-
         }
     });
-
 }
 
 function cancelPay(pay_id, callback) {
