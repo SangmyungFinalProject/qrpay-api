@@ -39,8 +39,6 @@ exports.initPassport = function (passport) {
             };
 
             process.nextTick(createUser);
-
-
         }
     ));
 
@@ -77,8 +75,6 @@ exports.initPassport = function (passport) {
             };
 
             process.nextTick(readUser);
-
-
         }
     ));
 };
