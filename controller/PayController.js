@@ -1,6 +1,6 @@
 var app = require('./../app');
 var connection = app.connection;
-var PushController = require('../PushController');
+var PushController = require('./PushController');
 
 function chargePay(payInfo, callback) {
 
