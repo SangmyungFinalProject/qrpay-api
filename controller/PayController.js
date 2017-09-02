@@ -31,10 +31,9 @@ function chargePay(payInfo, callback) {
                             console.log(err);
                             callback(err);
                         } else {
-
+                            callback(null, result);
                         }
                     });
-                    callback(null, payItemInfo);
                 }
             });
         }
