@@ -2,9 +2,10 @@ var app = require('./../app');
 var connection = app.connection;
 var PushController = require('./PushController');
 
-function chargePay(payInfo, callback) {
+function chargePay(payInfo, push_token, callback) {
 
     console.log(payInfo);
+    console.log("token: ", push_token);
 
     connection.query('insert into pay_info (total_price, card_id, user_id, item_id) values (?)',
                     [payInfo], function(error, result) {
@@ -25,13 +26,13 @@ function chargePay(payInfo, callback) {
                     console.log(error);
                     callback(error);
                 } else {
-                    PushController.sendPush(token, payInfo.total_price, function (err, result) {
+                    PushController.sendPush(push_token, payInfo.total_price, function (err, result) {
                         if (err)
                         {
                             console.log(err);
                             callback(err);
                         } else {
-                            callback(null, result);
+                            callback(null, push_token);
                         }
                     });
                 }
