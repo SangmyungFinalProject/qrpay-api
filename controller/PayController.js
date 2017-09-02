@@ -1,27 +1,20 @@
 var app = require('./../app');
 var connection = app.connection;
-var PushController = require('../CardController');
+var PushController = require('../PushController');
 
-function chargePay(info, callback) {
+function chargePay(payInfo, callback) {
 
-    console.log(info);
-
-    var user_id = info.user_id;
-    var card_id = info.card_id;
-    var item_id = info.item_id;
-    var total_price = info.total_price;
-
-    var pay_set = [total_price, card_id, user_id, item_id];
+    console.log(payInfo);
 
     connection.query('insert into pay_info (total_price, card_id, user_id, item_id) values (?)',
-                    [pay_set], function(error, result) {
+                    [payInfo], function(error, result) {
         if (error) {
             console.log(error);
             callback(error);
         } else {
             console.log('pay_id', result.insertId);
             var payItemInfo = {
-                item_id: info.item_id,
+                item_id: payInfo.item_id,
                 pay_id: result.insertId
             };
 
@@ -32,7 +25,7 @@ function chargePay(info, callback) {
                     console.log(error);
                     callback(error);
                 } else {
-                    PushController.sendPush(token, pay_set.total_price, function (err, result) {
+                    PushController.sendPush(token, payInfo.total_price, function (err, result) {
                         if (err)
                         {
                             console.log(err);

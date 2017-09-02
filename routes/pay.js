@@ -8,14 +8,14 @@ var PayController = require('../controller/PayController');
 
 router.post('/', function (req, res) {
 
-    var info = {
+    var payInfo = {
         card_id: Number(req.body.card_id),
         item_id: Number(req.body.item_id),
         user_id: Number(req.body.user_id),
         total_price: Number(req.body.total_price)
     };
 
-    PayController.chargePay(info, function (err, result) {
+    PayController.chargePay(payInfo, function (err, result) {
         if (err) {
             var errInfo = [];
             errInfo[0] = 'fail';
