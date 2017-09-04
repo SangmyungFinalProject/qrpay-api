@@ -65,7 +65,7 @@ function chargePay(payInfo, callback) {
 
                     var dt = new Date();
 
-                    //var d = dt.toFormat('YYYY-MM-DD HH24:MI:SS');
+                    // /var d = dt.toFormat('YYYY-MM-DD HH24:MI:SS');
                     var YY_MM = (Number(dt.toFormat('YYYY')) % 100 * 100 + Number(dt.toFormat('MM')));
 
                     if ((YY_MM - Number(rows[0].valid_date)) > 0) {
