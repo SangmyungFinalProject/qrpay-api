@@ -33,7 +33,7 @@ router.post('/', function (req, res) {
         valid_date: req.body.date,
         type: req.body.type,
         company: req.body.company,
-        limit: req.body.limit
+        bounds: Number(0)
     };
 
     var userId = req.body.userId;

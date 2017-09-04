@@ -12,6 +12,8 @@ var RedisStore = require('connect-redis')(session);
 var passport = require('passport');
 var app = express();
 var host = os.hostname();
+var async = require('async');
+var date = require('date-utils');
 var redisConfig = require('./config/redisConfig');
 
 console.log('host', host);
@@ -21,7 +23,7 @@ var connection = mysql.createPool({
     acquireTimeout: 30000,
     port: 3306,
     database: 'qrpay',
-    host: '13.124.113.193',
+    host: '13.124.174.11',
     user: 'root',
     password: 'blaster1122'
 });

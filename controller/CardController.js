@@ -46,6 +46,10 @@ function createCard(card, userId, callback) {
 
     console.log('card', card);
 
+    card.bounds = Math.floor(Math.random() * 500000) + 500000; // 50 ~ 100만 사이의 값
+
+    console.log(card.bounds);
+
     cardValidate(card.number, function (result) {
         if (result) {
             connection.query('select * from card_info where number = ?', card.number, function (error, rows) {
@@ -69,13 +73,11 @@ function createCard(card, userId, callback) {
                             }
                         });
                     } else {
-
                         connection.query('select id from card_company_info where id = ?', card.company, function (error, result) {
                             if (error) {
                                 console.log(error);
                                 callback(error);
                             } else {
-
                                 card.company = result[0].id;
                                 connection.query('insert into card_info set ?', card, function (error, result) {
                                     if (error) {
