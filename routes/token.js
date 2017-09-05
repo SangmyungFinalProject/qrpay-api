@@ -10,7 +10,7 @@ router.post('/', function(req, res, next) {
 
     if (req.isAuthenticated()) {
 
-        TokenContoller.saveToken(req.user.id, req.body.token, function (err, result) {
+        TokenContoller.saveToken(req.user.id, req.body.push_token, function (err, result) {
 
             if (result) {
                 response.result = true;

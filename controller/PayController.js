@@ -1,40 +1,86 @@
 var app = require('./../app');
 var connection = app.connection;
+var PushController = require('./PushController');
 
-function chargePay(info, callback) {
+function chargePay(payInfo, callback) {
 
-    console.log(info);
+    console.log(payInfo);
 
-    var user_id = info.user_id;
-    var card_id = info.card_id;
-    var item_id = info.item_id;
-    var total_price = info.total_price;
+    var errorSet = {
+        dataNull: '1',
+        boundsOver: '2',
+        validOver: '3',
+        timeOver: '4',
+        notExist: '5',
+        syntaxError: '6'
+    };
 
-    var pay_set = [total_price, card_id, user_id, item_id];
+    var dt = new Date();
 
-    connection.query('insert into pay_info (total_price, card_id, user_id, item_id) values (?, ?, ?, ?)',
-                    pay_set, function(error, result) {
-        if (error) {
-            console.log(error);
-            callback(error);
-        } else {
-            console.log('pay_id', result.insertId);
-            var payItemInfo = {
-                item_id: info.item_id,
-                pay_id: result.insertId
-            };
-            connection.query('insert into pay_item_info set ?', payItemInfo, function(error, result) {
-                if(error) {
-                    console.log(error);
-                    callback(error);
+    //var d = dt.toFormat('YYYY-MM-DD HH24:MI:SS');
+    var YY_MM = (Number(dt.toFormat('YYYY')) % 100 * 100 + Number(dt.toFormat('MM')));
+
+    var pay_card_id = 0;
+
+    if (isNaN(payInfo.user_id) || isNaN(payInfo.cvc) || isNaN(payInfo.card_number) || isNaN(payInfo.total_price)) {
+        callback(errorSet.dataNull);
+    } else {
+        /*if(시간 비교해서 1분 넘었을 경우) {
+         callback(errInfo.timeOver);
+         } else */
+        connection.query('select id, bounds, valid_date from card_info where number = ? and cvc = ?', [payInfo.card_number, payInfo.cvc], function (error_miss, rows) {
+            if (rows.length === 0) {
+                callback(errorSet.notExist);
+            } else {
+                console.log('card_id:', rows[0].id, 'bounds:', rows[0].bounds, 'valid_date:', rows[0].valid_date);
+
+                pay_card_id = Number(rows[0].id);
+
+                var bounds_user = Number(rows[0].bounds);
+
+                if ((YY_MM - Number(rows[0].valid_date)) > 0) {
+                    callback(errorSet.validOver);
                 } else {
-                    callback(null, payItemInfo);
+                    var query = 'select * from user_card_info where user_id = ? and card_id = ?';
+                    connection.query(query, [payInfo.user_id, rows[0].id], function(error, rows) {
+                        if(rows.length === 0) {
+                            callback(errorSet.notExist);
+                        } else {
+                            var bounds_calc = bounds_user - payInfo.total_price;
+
+                            if (bounds_calc < 0) {
+                                callback(errorSet.boundsOver);
+                            } else {
+                                connection.query('update card_info set bounds = ? where id = ?', [bounds_calc, pay_card_id], function (error, result) {
+                                    if (error) {
+                                        callback(errorSet.syntaxError);
+                                    } else {
+                                        connection.query('insert into pay_info (total_price, card_id, user_id) values (?, ?, ?)',
+                                            [payInfo.total_price, pay_card_id, payInfo.user_id], function(error, result) {
+                                                if (error) {
+                                                    console.log(error);
+                                                    callback(error);
+                                                } else {
+                                                    PushController.sendPush(payInfo.user_id, payInfo.total_price, function (err, result) {
+                                                        if (err)
+                                                        {
+                                                            console.log(err);
+                                                            callback(err);
+                                                        } else {
+                                                            callback(null, result);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
-            });
-
-        }
-    });
-
+            }
+        });
+    }
 }
 
 function cancelPay(pay_id, callback) {
