@@ -2,7 +2,6 @@
  * Created by woowahan on 2017. 8. 21..
  */
 var exports = module.exports = {};
-
 var app = require('./app');
 var UserHandler = require('./controller/UserController');
 var LocalStrategy = require('passport-local').Strategy;
@@ -21,23 +20,21 @@ exports.initPassport = function (passport) {
                 user.name = req.body.name;
                 user.email = email;
                 user.password = password;
-                UserHandler.insertUser(user, function (err, insertId) {
+                UserHandler.insertUser(user, function (err, insertUser) {
 
-                    if (err || !insertId) {
+                    if (err || !insertUser) {
                         console.error(err);
                         console.error(err);
                         return done(null, false);
                     }
 
-                    user.id = insertId;
+                    user.userId = insertUser.userId;
                     delete user.password;
-                    console.log('user local-signup : ' + user);
+                    console.log('user local-signup : ' + user.userId);
 
                     return done(null, user);
-
                 });
             };
-
             process.nextTick(createUser);
         }
     ));
@@ -63,19 +60,16 @@ exports.initPassport = function (passport) {
                     }
 
                     var user = {};
-                    user.id = result.id;
+                    user.userId = result.userId;
                     user.email = email;
                     user.name = result.name;
 
                     console.log('user local-login : ' + JSON.stringify(user));
 
                     return done(null, user);
-
                 });
             };
-
             process.nextTick(readUser);
         }
     ));
 };
-

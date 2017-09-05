@@ -46,6 +46,10 @@ function createCard(card, userId, callback) {
 
     console.log('card', card);
 
+    card.bounds = Math.floor(Math.random() * 500000) + 500000; // 50 ~ 100만 사이의 값
+
+    console.log(card.bounds);
+
     cardValidate(card.number, function (result) {
         if (result) {
             connection.query('select * from card_info where number = ?', card.number, function (error, rows) {
@@ -54,13 +58,10 @@ function createCard(card, userId, callback) {
                     callback(error);
                 } else {
                     if (rows.length > 0) {
-                        var userCardInfo = {
-                            user_id: Number(userId),
-                            card_id: rows[0].id
-                        };
-
+                        var params = [Number(userId), rows[0].id];
+                        console.log('params: ',params);
                         var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
-                        connection.query(query, [userCardInfo.user_id, userCardInfo.card_id], function (error, result) {
+                        connection.query(query, params, function (error, result) {
                             if (error) {
                                 console.log(error);
                                 callback(error);
@@ -69,27 +70,23 @@ function createCard(card, userId, callback) {
                             }
                         });
                     } else {
-
-                        connection.query('select id from card_company_info where name = ?', card.company, function (error, result) {
-                            if (error) {
-                                console.log(error);
-                                callback(error);
+                        connection.query('select id from card_company_info where id = ?', card.company, function (error, rows) {
+                            if (rows.length === 0) {
+                                var error_not_id = 'company not exist';
+                                console.log(error_not_id);
+                                callback(error_not_id);
                             } else {
-
                                 card.company = result[0].id;
                                 connection.query('insert into card_info set ?', card, function (error, result) {
                                     if (error) {
                                         console.log(error);
                                         callback(error);
                                     } else {
-                                        console.log(result.insertId);
-                                        var userCardInfo = {
-                                            user_id: userId,
-                                            card_id: result.insertId
-                                        };
 
+                                        var params = [userId, result.insertId];
+                                        console.log('params : ', params);
                                         var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
-                                        connection.query(query, [userCardInfo.user_id, userCardInfo.card_id], function (error, result) {
+                                        connection.query(query, params, function (error, result) {
                                             if (error) {
                                                 console.log(error);
                                                 callback(error);

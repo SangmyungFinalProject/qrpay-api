@@ -1,9 +1,9 @@
 var app = require('./../app');
 var connection = app.connection;
 
-function sendPush(token, total_price, callback) {
+function sendPush(push_token, total_price, callback) {
 
-    callback(null, true);
+    callback(null, push_token);
 }
 
 module.exports = {

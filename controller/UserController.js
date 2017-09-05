@@ -18,6 +18,7 @@ function insertUser(user, callback) {
                 if (error) {
                     callback(error, result);
                 } else {
+                    user.userId = result.insertId;
                     callback(null, user);
                 }
             });
@@ -28,17 +29,16 @@ function insertUser(user, callback) {
     });
 }
 
-function readUser(user, callback) {
+function readUser(email, password, callback) {
 
-    var userInfo = [user.email, user.password];
-    connection.query('select * from user_info where email = ? and password = ? order by id asc limit 1', userInfo, function (error, rows) {
+    connection.query('select * from user_info where email = ? and password = ? order by id asc limit 1', [email, password], function (error, rows) {
        if (error) {
            console.log(error);
            callback(error);
        } else {
            if(rows.length > 0) {
                var result = {};
-               result.userId = rows[0].id;
+               result.userId = rows[0].userId;
                result.email = rows[0].email;
                result.name = rows[0].name;
                callback(null, result);
