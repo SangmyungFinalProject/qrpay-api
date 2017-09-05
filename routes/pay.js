@@ -8,16 +8,21 @@ var PayController = require('../controller/PayController');
 
 router.post('/', function (req, res) {
 
-    var info = {
-        card_id: Number(req.body.card_id),
-        item_id: Number(req.body.item_id),
+    var payInfo = {
+        card_number: req.body.card_number,
         user_id: Number(req.body.user_id),
-        total_price: Number(req.body.total_price)
+        total_price: Number(req.body.total_price),
+        // 현재 시간 정보
+        cvc: req.body.cvc
     };
 
-    PayController.chargePay(info, function (err, result) {
+    PayController.chargePay(payInfo, function (err, result) {
         if (err) {
-            return res.json({error: err});
+            var errInfo = '';
+            errInfo += 'fail,';
+            errInfo += err;
+
+            return res.send(errInfo);
         }
 
         var response = {};

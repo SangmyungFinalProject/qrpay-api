@@ -25,6 +25,39 @@ router.get('/:userId', function (req, res, next) {
     });
 });
 
+router.get('/', function (req, res, next) {
+
+    if(!req.isAuthenticated()) {
+        console.log('error!');
+
+        var error = 'sign in fail';
+        var response = {};
+        response.result = false;
+        response.message = "fail";
+        response.date = error;
+
+        return res.send(response);
+    }
+
+    console.log(user);
+
+    var userId = req.user.id;
+
+    console.log('userId::', userId);
+    CardController.readCards(userId, function (err, result) {
+        if (err) {
+            return res.json({error: err});
+        }
+
+        var response = {};
+        response.result = true;
+        response.message = "success";
+        response.data = result;
+
+        res.send(response);
+    });
+});
+
 router.post('/', function (req, res) {
 
     var card = {
@@ -32,7 +65,8 @@ router.post('/', function (req, res) {
         cvc: req.body.cvc,
         valid_date: req.body.date,
         type: req.body.type,
-        company: req.body.company
+        company: req.body.company,
+        bounds: Number(0)
     };
 
     var userId = req.body.userId;
@@ -55,9 +89,9 @@ router.post('/', function (req, res) {
 
 router.post('/delete', function (req, res) {
 
-    var card_id = req.body.card_id;
+    var cardId = req.body.cardId;
 
-    CardController.deleteCard(card_id, function (err, result) {
+    CardController.deleteCard(cardId, function (err, result) {
         if (err) {
             return res.json({error: err});
         }
@@ -73,7 +107,7 @@ router.post('/delete', function (req, res) {
 
 router.post('/update', function (req, res) {
 
-    var card_id = req.body.card_id;
+    var cardId = req.body.cardId;
 
     var card = {
         number: req.body.number,
@@ -82,7 +116,7 @@ router.post('/update', function (req, res) {
         type: req.body.type
     };
 
-    CardController.updateCard(card, card_id, function (err, result) {
+    CardController.updateCard(card, cardId, function (err, result) {
         if (err) {
             return res.json({error: err});
         }

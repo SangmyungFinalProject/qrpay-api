@@ -1,52 +1,40 @@
 var express = require('express');
 var router = express.Router();
 var UserController = require('../controller/UserController');
+var passport = require('../app').passport;
 
-/* GET home page. */
+/* failureRedirect */
 router.get('/', function (req, res, next) {
-    res.render('index', {title: 'Express'});
+    var error = 'failureRedirect';
+
+    var response = {};
+    response.result = false;
+    response.message = "fail";
+    response.data = error;
+
+    res.send(response);
 });
 
-router.post('/', function (req, res) {
-    var user = {
-        email: req.body.email,
-        name: req.body.name,
-        password: req.body.password
-    };
+router.post('/', passport.authenticate('local-signup', {
+    failureRedirect: '/'
+}), function (req, res) {
+    var response = {};
+    response.result = true;
+    response.message = "success";
+    response.data = req.user;
 
-    UserController.insertUser(user, function (err, result) {
-        if (err) {
-            return res.json({error: err});
-        }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
-    });
+    res.send(response);
 });
 
-router.post('/login', function (req, res) {
-    var user = {
-        email: req.body.email,
-        password: req.body.password
-    };
+router.post('/login', passport.authenticate('local-login', {
+    failureRedirect: '/'
+}), function (req, res) {
+    var response = {};
+    response.result = true;
+    response.message = "success";
+    response.data = req.user;
 
-    UserController.readUser(user, function (err, result) {
-
-        if (err) {
-            return res.json({error: err});
-        }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
-    });
+    res.send(response);
 });
 
 router.post('/delete', function (req, res) {

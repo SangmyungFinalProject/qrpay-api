@@ -12,6 +12,8 @@ var RedisStore = require('connect-redis')(session);
 var passport = require('passport');
 var app = express();
 var host = os.hostname();
+var async = require('async');
+var date = require('date-utils');
 var redisConfig = require('./config/redisConfig');
 
 console.log('host', host);
@@ -37,24 +39,6 @@ if (host === 'MS-20ui-MacBook-Pro.local') {
         user: 'root',
         password: '@cosin1210'
     });
-    redisConfig = {
-        url: 'redis://localhost:6379',
-        address: 'localhost',
-        port: 6379,
-        no_ready_check: true,
-        db: 0,
-        ttl: 2592000
-    };
-}
-if (host === 'gimjihun-ui-MacBook-Pro.local') {
-    redisConfig = {
-        url: 'redis://localhost:6379',
-        address: 'localhost',
-        port: 6379,
-        no_ready_check: true,
-        db: 0,
-        ttl: 2592000
-    };
 }
 
 var client = redis.createClient(redisConfig.port, redisConfig.address);
@@ -89,6 +73,7 @@ app.use(session(
 
 // 로그인 성공 시 유저 정보 저장
 passport.serializeUser(function (user, done) {
+    console.log(user);
     console.log('serialize : ' + JSON.stringify(user));
     done(null, user);
 });
@@ -96,6 +81,7 @@ passport.serializeUser(function (user, done) {
 // 인증 후, 페이지 접근시 마다 사용자 정보를 Session에서 읽어옴.
 passport.deserializeUser(function (user, done) {
     //findById(id, function (err, user) {
+    console.log(user);
     console.log('deserialize : ' + JSON.stringify(user));
     done(null, user);
     //});
