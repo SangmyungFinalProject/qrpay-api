@@ -67,23 +67,15 @@ router.post('/delete', function (req, res) {
     });
 });
 
-/*router.get('/:email', function (req, res, next) {
+// login check
+router.get('/:email', function (req, res, next) {
 
-    var email = req.params.email;
+    var response = {};
+    response.result = true;
+    response.message = "success";
+    response.data = req.isAuthenticated();
 
-    console.log('email', email);
-    UserController.readUser(email, function (err, result) {
-        if (err) {
-            return res.json({error: err});
-        }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
-    });
-});*/
+    res.send(response);
+});
 
 module.exports = router;

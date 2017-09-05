@@ -21,7 +21,7 @@ var connection = mysql.createPool({
     acquireTimeout: 30000,
     port: 3306,
     database: 'qrpay',
-    host: '13.124.113.193',
+    host: '13.124.174.11',
     user: 'root',
     password: 'blaster1122'
 });
