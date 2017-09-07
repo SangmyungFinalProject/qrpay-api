@@ -14,6 +14,7 @@ var app = express();
 var host = os.hostname();
 var async = require('async');
 var date = require('date-utils');
+var request = require('request');
 var redisConfig = require('./config/redisConfig');
 
 console.log('host', host);

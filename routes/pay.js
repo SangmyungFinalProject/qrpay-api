@@ -10,7 +10,7 @@ router.post('/', function (req, res) {
 
     var payInfo = {
         card_number: req.body.card_number,
-        user_id: Number(req.body.user_id),
+        userId: req.user.userId,
         total_price: Number(req.body.total_price),
         // 현재 시간 정보
         cvc: req.body.cvc

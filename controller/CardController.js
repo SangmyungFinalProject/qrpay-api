@@ -76,7 +76,6 @@ function createCard(card, userId, callback) {
                                 console.log(error_not_id);
                                 callback(error_not_id);
                             } else {
-                                card.company = result[0].id;
                                 connection.query('insert into card_info set ?', card, function (error, result) {
                                     if (error) {
                                         console.log(error);

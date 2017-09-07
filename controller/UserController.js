@@ -14,12 +14,20 @@ function insertUser(user, callback) {
 
     emailValidate(user.email, function(result) {
         if(result) {
-            connection.query('insert into user_info set ?', user, function (error, result) {
-                if (error) {
-                    callback(error, result);
+            connection.query('select * from user_info where email = ?', user.email, function (error, rows) {
+                if(rows.length > 0) {
+                    var error_dup = 'same email exist';
+                    console.log(error_dup);
+                    callback(error_dup);
                 } else {
-                    user.userId = result.insertId;
-                    callback(null, user);
+                    connection.query('insert into user_info set ?', user, function (error, result) {
+                        if (error) {
+                            callback(error, result);
+                        } else {
+                            user.userId = result.insertId;
+                            callback(null, user);
+                        }
+                    });
                 }
             });
         } else {
@@ -38,7 +46,7 @@ function readUser(email, password, callback) {
        } else {
            if(rows.length > 0) {
                var result = {};
-               result.userId = rows[0].userId;
+               result.userId = rows[0].id;
                result.email = rows[0].email;
                result.name = rows[0].name;
                callback(null, result);

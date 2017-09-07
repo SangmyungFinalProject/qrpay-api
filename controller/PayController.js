@@ -22,7 +22,7 @@ function chargePay(payInfo, callback) {
 
     var pay_card_id = 0;
 
-    if (isNaN(payInfo.user_id) || isNaN(payInfo.cvc) || isNaN(payInfo.card_number) || isNaN(payInfo.total_price)) {
+    if (isNaN(payInfo.userId) || isNaN(payInfo.cvc) || isNaN(payInfo.card_number) || isNaN(payInfo.total_price)) {
         callback(errorSet.dataNull);
     } else {
         /*if(시간 비교해서 1분 넘었을 경우) {
@@ -42,7 +42,7 @@ function chargePay(payInfo, callback) {
                     callback(errorSet.validOver);
                 } else {
                     var query = 'select * from user_card_info where user_id = ? and card_id = ?';
-                    connection.query(query, [payInfo.user_id, rows[0].id], function(error, rows) {
+                    connection.query(query, [payInfo.userId, rows[0].id], function(error, rows) {
                         if(rows.length === 0) {
                             callback(errorSet.notExist);
                         } else {
@@ -56,12 +56,12 @@ function chargePay(payInfo, callback) {
                                         callback(errorSet.syntaxError);
                                     } else {
                                         connection.query('insert into pay_info (total_price, card_id, user_id) values (?, ?, ?)',
-                                            [payInfo.total_price, pay_card_id, payInfo.user_id], function(error, result) {
+                                            [payInfo.total_price, pay_card_id, payInfo.userId], function(error, result) {
                                                 if (error) {
                                                     console.log(error);
                                                     callback(error);
                                                 } else {
-                                                    PushController.sendPush(payInfo.user_id, payInfo.total_price, function (err, result) {
+                                                    PushController.sendPush(payInfo.userId, payInfo.total_price, function (err, result) {
                                                         if (err)
                                                         {
                                                             console.log(err);
