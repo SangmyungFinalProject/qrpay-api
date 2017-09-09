@@ -4,11 +4,9 @@ var PushController = require('./PushController');
 var async = require('async');
 var aes = require('aes-cross');
 
-function chargePay(encryptedData, userId, callback) {
+function chargePay(encryptedData, callback) {
 
     var payInfo = decrypt(encryptedData);
-
-    payInfo.userId = userId;
 
     var errorSet = {
         dataNull: '1',
@@ -179,9 +177,12 @@ function decrypt(encryptedData) {
 
     var payInfo = {
         card_number: encryptedData.crypto.card_number,
-        total_price: encryptedData.crypto.total_price,
-        // 현재 시간 정보
-        cvc: encryptedData.crypto.cvc
+        total_price: encryptedData.total_price,
+        cvc: encryptedData.crypto.cvc,
+        userId: encryptedData.crypto.userId,
+        deviceToken: encryptedData.crypto.deviceToken
+        // time: encryptedData.crypto.time,
+        // pos_time: encryptedData.pos_time
     };
 
     console.log(payInfo);

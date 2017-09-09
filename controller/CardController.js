@@ -15,6 +15,8 @@ function readCards(userId, callback) {
         if (error) {
             console.log(error);
             callback(error);
+        } else if (rows.length === 0) {
+            callback('userId not Exist');
         } else {
             var cards = [];
             rows.forEach(function (row) {
@@ -24,7 +26,7 @@ function readCards(userId, callback) {
             console.log('cards : ', cards);
 
             if (cards.length <= 0) {
-                return callback(null, cards);
+                return callback('cardId not Exist');
             }
 
             var params = [cards];

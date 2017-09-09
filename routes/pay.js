@@ -12,7 +12,7 @@ router.post('/', function (req, res) {
 
     var encryptedData = req.body;
 
-    PayController.chargePay(encryptedData, req.user.userId, function (err) {
+    PayController.chargePay(encryptedData, function (err) {
         if (err) {
             var errInfo = '';
             errInfo += 'fail,';
