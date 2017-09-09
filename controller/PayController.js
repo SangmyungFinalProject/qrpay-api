@@ -156,15 +156,18 @@ function payList(userId, callback) {
 function decrypt(encryptedData) {
     // decrypt encryptedData
 
+    aes.setKeySize(256);
+    var iv = new Buffer(new Array(16));
+    var key = new Buffer(new Array(32));
 
-    console.log(encryptedData);
+    var test = '';
+    test += encryptedData.crypto;
 
-    var testTxt = 'asdfW  #)(ssff234';
-    var key = new Buffer([1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6]);
+    console.log(test);
 
-    var enc = aes.encText(testTxt,key);
+    var enc = aes.encText(test, key, iv);
     console.log('enc:%s',enc);
-    var dec = aes.decText(enc,key);
+    var dec = aes.decText(enc,key, iv);
     console.log('dec:%s',dec);
 
     // todo time vs pos_time 비교해서 짤라내기
@@ -175,11 +178,13 @@ function decrypt(encryptedData) {
     // }
 
     var payInfo = {
-        card_number: encryptedData.card_number,
-        total_price: encryptedData.total_price,
+        card_number: encryptedData.crypto.card_number,
+        total_price: encryptedData.crypto.total_price,
         // 현재 시간 정보
-        cvc: encryptedData.cvc
+        cvc: encryptedData.crypto.cvc
     };
+
+    console.log(payInfo);
 
     return payInfo;
 }
