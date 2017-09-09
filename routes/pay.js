@@ -8,15 +8,11 @@ var PayController = require('../controller/PayController');
 
 router.post('/', function (req, res) {
 
-    var payInfo = {
-        card_number: req.body.card_number,
-        userId: req.user.userId,
-        total_price: Number(req.body.total_price),
-        // 현재 시간 정보
-        cvc: req.body.cvc
-    };
+    req.accepts('application/json');
 
-    PayController.chargePay(payInfo, function (err, result) {
+    var encryptedData = req.body;
+
+    PayController.chargePay(encryptedData, req.user.userId, function (err) {
         if (err) {
             var errInfo = '';
             errInfo += 'fail,';
@@ -25,12 +21,8 @@ router.post('/', function (req, res) {
             return res.send(errInfo);
         }
 
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
+        var result = 'success,0';
+        res.send(result);
     });
 });
 
@@ -38,35 +30,33 @@ router.post('/cancel', function (req, res) {
 
     var pay_id = req.body.pay_id;
 
-    PayController.cancelPay(pay_id, function (err, result) {
+    PayController.cancelPay(pay_id, function (err) {
         if (err) {
-            return res.json({error: err});
+            var errInfo = '';
+            errInfo += 'fail,';
+            errInfo += err;
+
+            return res.send(errInfo);
+        } else {
+        var result = 'success,0';
+        res.send(result);
         }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
     });
 });
 
-router.post('/list', function (req, res) {
+router.get('/list', function (req, res) {
 
-    var card_id = req.body.card_id;
-
-    PayController.payList(card_id, function (err, result) {
+    PayController.payList(req.user.userId, function (err, result) {
         if (err) {
             return res.json({error: err});
-        }
-
+        } else {
         var response = {};
         response.result = true;
         response.message = "success";
         response.data = result;
 
         res.send(response);
+        }
     });
 });
 

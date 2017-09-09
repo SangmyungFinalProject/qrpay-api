@@ -1,39 +1,43 @@
 var app = require('./../app');
 var connection = app.connection;
-
-function emailValidate(email, callback) {
-    var regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    callback(regex.test(email));
-}
+var async = require('async');
 
 function insertUser(user, callback) {
 
-    console.log('user', user);
+    var tasks = [
+        function (callback) {
+            var regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
-    console.log('connection', connection);
+            if (!regex.test(user.email)) return callback('email validation fail');
+            else callback(null, user.email);
+        },
 
-    emailValidate(user.email, function(result) {
-        if(result) {
-            connection.query('select * from user_info where email = ?', user.email, function (error, rows) {
-                if(rows.length > 0) {
-                    var error_dup = 'same email exist';
-                    console.log(error_dup);
-                    callback(error_dup);
-                } else {
-                    connection.query('insert into user_info set ?', user, function (error, result) {
-                        if (error) {
-                            callback(error, result);
-                        } else {
-                            user.userId = result.insertId;
-                            callback(null, user);
-                        }
-                    });
+        function (email, callback) {
+            connection.query('select * from user_info where email = ?', user.email, function (err, rows) {
+                if (err) return callback(err);
+                else if (rows.length > 0) return callback('same email exist');
+                else callback(null);
+            })
+        },
+
+        function (callback) {
+            connection.query('insert into user_info set ?', user, function (err, result) {
+                if (err) return callback(err);
+                else {
+                    user.userId = result.insertId;
+                    console.log(user);
+                    callback(null, user);
                 }
-            });
-        } else {
-            var error = 'email validation fail';
-            callback(error);
+            })
         }
+    ];
+
+    async.waterfall(tasks, function (err, result) {
+        if (err)
+            console.log('err:', err);
+        else
+            console.log('done');
+            callback(null, result);
     });
 }
 

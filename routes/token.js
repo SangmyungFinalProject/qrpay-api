@@ -4,13 +4,13 @@
 
 var express = require('express');
 var router = express.Router();
-var TokenContoller = require('../controller/TokenContoller');
+var TokenController = require('../controller/TokenController');
 
 router.post('/', function(req, res, next) {
 
     if (req.isAuthenticated()) {
 
-        TokenContoller.saveToken(req.user.id, req.body.push_token, function (err, result) {
+        TokenController.saveToken(req.user.id, req.body.push_token, function (err, result) {
 
             if (result) {
                 response.result = true;

@@ -3,19 +3,27 @@
  */
 var express = require('express');
 var router = express.Router();
+var PushController = require('../controller/PushController');
 
 /* POST Push Test. */
 router.post('/', function(req, res, next) {
 
-    var title = 'push test';
-    var contents = 'contents';
-    var deviceToken = req.body.token;
+    var pay_token = req.body.token;
 
-    // push server request
+    PushController.sendPush(pay_token, total_price, function(err, result) {
 
+        var response = {};
 
-    res.send("ok");
-
+        if (result) {
+            response.result = true;
+            response.message = "success";
+            response.data = result;
+        } else {
+            response.result = false;
+            response.message = err;
+        }
+        res.send(response);
+    });
 
 });
 

@@ -1,5 +1,6 @@
 var app = require('./../app');
 var connection = app.connection;
+var request = require('request');
 
 function saveToken(userId, push_token, callback) {
 
@@ -16,5 +17,5 @@ function saveToken(userId, push_token, callback) {
 }
 
 module.exports = {
-    saveToken: saveToken
+    saveToken: saveToken,
 };
