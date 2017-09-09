@@ -42,8 +42,36 @@ if (host === 'MS-20ui-MacBook-Pro.local') {
     });
 }
 
-var client = redis.createClient(redisConfig.port, redisConfig.address);
-var redisStore = new RedisStore({host: redisConfig.url, port: redisConfig.port, client: client, ttl: redisConfig.ttl});
+const client = redis.createClient(redisConfig.port, redisConfig.name, {
+    auth_pass: redisConfig.password,
+    tls: { servername: redisConfig.name }
+});
+
+client.on("error", function (err) {
+    'use strict';
+
+
+    console.log(arguments, new Date());
+    if (err) {
+        console.error(err);
+        console.trace(err);
+        //winston.error(err);
+    }
+});
+client.select(redisConfig.db, function (err) {
+    'use strict';
+    if (err) {
+        console.error(err);
+        console.trace(err);
+        //winston.error(err);
+    }
+
+    console.log('redis client selected ', arguments, new Date());
+
+});
+
+
+var redisStore = new RedisStore({client: client});
 exports.connection = connection;
 
 // view engine setup
