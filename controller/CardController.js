@@ -9,8 +9,6 @@ function cardValidate(cardNumber, callback) {
 
 function readCards(userId, callback) {
 
-    userId = 55;
-
     console.log('userId', userId);
 
     connection.query('select * from user_card_info where user_id = ?', userId, function (error, rows) {
