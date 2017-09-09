@@ -161,7 +161,7 @@ function decrypt(encryptedData) {
     var key = new Buffer(new Array(32));
 
     var test = '';
-    test += encryptedData.crypto;
+    test += encryptedData.crypto.card_number;
 
     console.log(test);
 

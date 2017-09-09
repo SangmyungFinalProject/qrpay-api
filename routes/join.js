@@ -56,7 +56,7 @@ router.post('/delete', function (req, res) {
 });
 
 // login check
-router.get('/:email', function (req, res, next) {
+router.get('/check', function (req, res, next) {
 
     var response = {};
     response.result = true;
