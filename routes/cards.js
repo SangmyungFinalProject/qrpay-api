@@ -5,26 +5,6 @@ var express = require('express');
 var router = express.Router();
 var CardController = require('../controller/CardController');
 
-/* GET card list. */
-router.get('/:userId', function (req, res, next) {
-
-    var userId = req.params.userId;
-
-    console.log('userId', userId);
-    CardController.readCards(userId, function (err, result) {
-        if (err) {
-            return res.json({error: err});
-        }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
-    });
-});
-
 router.get('/', function (req, res, next) {
 
     if(!req.isAuthenticated()) {
@@ -33,7 +13,7 @@ router.get('/', function (req, res, next) {
         var error = 'sign in fail';
         var response = {};
         response.result = false;
-        response.message = "fail";
+        response.message = "Sing-in fail";
         response.date = error;
 
         return res.send(response);

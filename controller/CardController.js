@@ -9,12 +9,16 @@ function cardValidate(cardNumber, callback) {
 
 function readCards(userId, callback) {
 
+    userId = 55;
+
     console.log('userId', userId);
 
     connection.query('select * from user_card_info where user_id = ?', userId, function (error, rows) {
         if (error) {
             console.log(error);
             callback(error);
+        } else if (rows.length === 0) {
+            callback('userId not Exist');
         } else {
             var cards = [];
             rows.forEach(function (row) {
@@ -24,7 +28,7 @@ function readCards(userId, callback) {
             console.log('cards : ', cards);
 
             if (cards.length <= 0) {
-                return callback(null, cards);
+                return callback('cardId not Exist');
             }
 
             var params = [cards];
