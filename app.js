@@ -14,6 +14,7 @@ var app = express();
 var host = os.hostname();
 var async = require('async');
 var date = require('date-utils');
+var request = require('request');
 var redisConfig = require('./config/redisConfig');
 
 console.log('host', host);
@@ -81,8 +82,8 @@ passport.serializeUser(function (user, done) {
 // 인증 후, 페이지 접근시 마다 사용자 정보를 Session에서 읽어옴.
 passport.deserializeUser(function (user, done) {
     //findById(id, function (err, user) {
-    console.log(user);
-    console.log('deserialize : ' + JSON.stringify(user));
+    //console.log(user);
+    //console.log('deserialize : ' + JSON.stringify(user));
     done(null, user);
     //});
 });

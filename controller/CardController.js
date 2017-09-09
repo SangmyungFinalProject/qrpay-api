@@ -44,11 +44,11 @@ function readCards(userId, callback) {
 
 function createCard(card, userId, callback) {
 
+    var cardId = 0;
+
     console.log('card', card);
 
     card.bounds = Math.floor(Math.random() * 500000) + 500000; // 50 ~ 100만 사이의 값
-
-    console.log(card.bounds);
 
     cardValidate(card.number, function (result) {
         if (result) {
@@ -58,15 +58,28 @@ function createCard(card, userId, callback) {
                     callback(error);
                 } else {
                     if (rows.length > 0) {
-                        var params = [Number(userId), rows[0].id];
-                        console.log('params: ',params);
-                        var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
-                        connection.query(query, params, function (error, result) {
+                        cardId = rows[0].id;
+                        var query = 'select * from user_card_info where user_id = ? and card_id = ?';
+                        connection.query(query, [userId, cardId], function (error, rows) {
                             if (error) {
                                 console.log(error);
                                 callback(error);
+                            } else if (rows.length > 0) {
+                                var error_already = 'already insert id';
+                                callback(error_already);
                             } else {
-                                callback(null, card);
+                                var params = [Number(userId), rows[0].id];
+                                console.log('params: ',params);
+
+                                var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
+                                connection.query(query, params, function (error, result) {
+                                    if (error) {
+                                        console.log(error);
+                                        callback(error);
+                                    } else {
+                                        callback(null, card);
+                                    }
+                                });
                             }
                         });
                     } else {
@@ -76,7 +89,6 @@ function createCard(card, userId, callback) {
                                 console.log(error_not_id);
                                 callback(error_not_id);
                             } else {
-                                card.company = result[0].id;
                                 connection.query('insert into card_info set ?', card, function (error, result) {
                                     if (error) {
                                         console.log(error);

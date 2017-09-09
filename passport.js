@@ -12,7 +12,7 @@ exports.initPassport = function (passport) {
             usernameField: 'email',
             passwordField: 'password',
             passReqToCallback: true,
-            session: false
+            session: true
         }
         , function (req, email, password, done) {
             createUser = function () {
@@ -44,7 +44,7 @@ exports.initPassport = function (passport) {
             usernameField: 'email',
             passwordField: 'password',
             passReqToCallback: true,
-            session: false
+            session: true
         }
         , function (req, email, password, done) {
             readUser = function () {

@@ -39,9 +39,7 @@ router.get('/', function (req, res, next) {
         return res.send(response);
     }
 
-    console.log(user);
-
-    var userId = req.user.id;
+    var userId = req.user.userId;
 
     console.log('userId::', userId);
     CardController.readCards(userId, function (err, result) {
@@ -60,16 +58,28 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res) {
 
+    if(!req.isAuthenticated()) {
+        console.log('error!');
+
+        var error = 'sign in fail';
+        var response = {};
+        response.result = false;
+        response.message = "fail";
+        response.date = error;
+
+        return res.send(response);
+    }
+
     var card = {
         number: req.body.number,
         cvc: req.body.cvc,
         valid_date: req.body.date,
         type: req.body.type,
-        company: req.body.company,
+        company: Number(req.body.company),
         bounds: Number(0)
     };
 
-    var userId = req.body.userId;
+    var userId = req.user.userId;
 
     CardController.createCard(card, userId, function (err, result) {
         var response = {};
