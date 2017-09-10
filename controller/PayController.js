@@ -153,7 +153,7 @@ function payList(userId, callback) {
     });
 }
 
-function decrypt(encryptedData, errorSet) {
+function decrypt(encryptedData) {
     // decrypt encryptedData
 
     aes.setKeySize(256);
@@ -181,7 +181,7 @@ function decrypt(encryptedData, errorSet) {
         return errorSet.timeOver;
     }
 
-    return payInfo;
+    else return payInfo;
 }
 
 module.exports = {
