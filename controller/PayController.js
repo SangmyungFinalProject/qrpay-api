@@ -4,23 +4,23 @@ var PushController = require('./PushController');
 var async = require('async');
 var aes = require('aes-cross');
 
-var errorSet = {
-    dataNull: '1',
-    boundsOver: '2',
-    validOver: '3',
-    timeOver: '4',
-    notExist: '5',
-    syntaxError: '6'
-};
-
 function chargePay(encryptedData, callback) {
 
     var payInfo = decrypt(encryptedData);
 
+    var errorSet = {
+        dataNull: '1',
+        boundsOver: '2',
+        validOver: '3',
+        timeOver: '4',
+        notExist: '5',
+        syntaxError: '6'
+    };
+
     if (payInfo === errorSet.timeOver) {
         return callback(errorSet.timeOver);
     }
-  
+
     var dt = new Date();
 
     //var d = dt.toFormat('YYYY-MM-DD HH24:MI:SS');
@@ -177,8 +177,7 @@ function decrypt(encryptedData, errorSet) {
         pos_time: encryptedData.pos_time
     };
 
-
-    if (Number(payInfo.pos_time)- Number(payInfo.time) > 60 * 1000) {
+    if (Number(payInfo.pos_time) - Number(payInfo.time) > 60 * 1000) {
         return errorSet.timeOver;
     }
 
