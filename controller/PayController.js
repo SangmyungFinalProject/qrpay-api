@@ -4,18 +4,18 @@ var PushController = require('./PushController');
 var async = require('async');
 var aes = require('aes-cross');
 
+var errorSet = {
+    dataNull: '1',
+    boundsOver: '2',
+    validOver: '3',
+    timeOver: '4',
+    notExist: '5',
+    syntaxError: '6'
+};
+
 function chargePay(encryptedData, callback) {
 
     var payInfo = decrypt(encryptedData);
-
-    var errorSet = {
-        dataNull: '1',
-        boundsOver: '2',
-        validOver: '3',
-        timeOver: '4',
-        notExist: '5',
-        syntaxError: '6'
-    };
 
     if (payInfo === errorSet.timeOver) {
         return callback(errorSet.timeOver);
