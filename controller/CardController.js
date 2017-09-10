@@ -137,7 +137,7 @@ function deleteCard(card_id, callback) {
                     console.log(error);
                     callback(error);
                 } else {
-                    callback(null, result);
+                    callback(null, card_id);
                 }
             });
         }
@@ -151,7 +151,7 @@ function updateCard(card, card_id, callback) {
             console.log(error);
             callback(error);
         } else {
-            callback(null, result);
+            callback(null, card_id);
         }
     });
 }
