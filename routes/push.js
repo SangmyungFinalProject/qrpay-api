@@ -8,9 +8,7 @@ var PushController = require('../controller/PushController');
 /* POST Push Test. */
 router.post('/', function(req, res, next) {
 
-    var pay_token = req.body.token;
-
-    PushController.sendPush(pay_token, total_price, function(err, result) {
+    PushController.sendPush(deviceToken, total_price, payId, function(err, result) {
 
         var response = {};
 
