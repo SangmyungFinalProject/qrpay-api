@@ -8,10 +8,6 @@ function chargePay(encryptedData, callback) {
 
     var payInfo = decrypt(encryptedData);
 
-    if (payInfo === errorSet.timeOver) {
-        return callback(errorSet.timeOver);
-    }
-
     var errorSet = {
         dataNull: '1',
         boundsOver: '2',
@@ -20,6 +16,10 @@ function chargePay(encryptedData, callback) {
         notExist: '5',
         syntaxError: '6'
     };
+
+    if (payInfo === errorSet.timeOver) {
+        return callback(errorSet.timeOver);
+    }
 
     var dt = new Date();
 
@@ -176,7 +176,6 @@ function decrypt(encryptedData, errorSet) {
         time: data.time,
         pos_time: encryptedData.pos_time
     };
-
 
     if (Number(payInfo.pos_time) - Number(payInfo.time) > 60 * 1000) {
         return errorSet.timeOver;
