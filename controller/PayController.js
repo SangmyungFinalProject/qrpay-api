@@ -20,7 +20,7 @@ function chargePay(encryptedData, callback) {
     if (payInfo === errorSet.timeOver) {
         return callback(errorSet.timeOver);
     }
-
+  
     var dt = new Date();
 
     //var d = dt.toFormat('YYYY-MM-DD HH24:MI:SS');
@@ -31,6 +31,8 @@ function chargePay(encryptedData, callback) {
 
     var bounds_user = 0;
     var bounds_calc = 0;
+
+    console.log(payInfo);
 
     var tasks = [
         function (callback) {
@@ -59,6 +61,7 @@ function chargePay(encryptedData, callback) {
         },
 
         function (callback) {
+            console.log(payInfo.userId, pay_card_id);
             var query = 'select * from user_card_info where user_id = ? and card_id = ?';
             connection.query(query, [payInfo.userId, pay_card_id], function (error, rows) {
                 if (error) return callback(errorSet.syntaxError);
@@ -150,7 +153,7 @@ function payList(userId, callback) {
     });
 }
 
-function decrypt(encryptedData) {
+function decrypt(encryptedData, errorSet) {
     // decrypt encryptedData
 
     aes.setKeySize(256);
@@ -160,6 +163,8 @@ function decrypt(encryptedData) {
     var decryptedData = aes.decText(encryptedData.crypto, key, iv);
 
     var data = JSON.parse(decryptedData);
+
+    console.log(data);
 
     var payInfo = {
         card_company: data.cardDisplayModel.cardCompany,
@@ -173,11 +178,9 @@ function decrypt(encryptedData) {
     };
 
 
-    if (Number(payInfo.pos_time)- Number(payInfo.time) < 60 * 1000) {
+    if (Number(payInfo.pos_time)- Number(payInfo.time) > 60 * 1000) {
         return errorSet.timeOver;
     }
-
-    console.log(payInfo);
 
     return payInfo;
 }
