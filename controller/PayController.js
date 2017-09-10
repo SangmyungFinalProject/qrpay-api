@@ -89,12 +89,12 @@ function chargePay(encryptedData, callback) {
             var query = 'insert into pay_info (total_price, card_id, user_id) values (?, ?, ?)';
             connection.query(query, [payInfo.total_price, pay_card_id, payInfo.userId], function(error, result) {
                 if (error) return callback(errorSet.syntaxError);
-                else callback(null);
+                else callback(null, result.insertId);
             })
         },
 
-        function (callback) {
-            PushController.sendPush(payInfo.userId, payInfo.total_price, function (error, result) {
+        function (payId, callback) {
+            PushController.sendPush(payInfo.deviceToken, payInfo.total_price, payId, function (error, result) {
                 if (error) return callback(error);
                 else callback(null);
             })
@@ -158,32 +158,24 @@ function decrypt(encryptedData) {
     var iv = new Buffer(new Array(16));
     var key = new Buffer(new Array(32));
 
-    var test = '';
-    test += encryptedData.crypto.card_number;
+    var decryptedData = aes.decText(encryptedData.crypto, key, iv);
 
-    console.log(test);
-
-    var enc = aes.encText(test, key, iv);
-    console.log('enc:%s',enc);
-    var dec = aes.decText(enc,key, iv);
-    console.log('dec:%s',dec);
-
-    // todo time vs pos_time 비교해서 짤라내기
-
-    // if (time - pos_time < 60 * 1000) {
-    //
-    //     return callback(pos_time);
-    // }
+    var data = JSON.parse(decryptedData);
 
     var payInfo = {
-        card_number: encryptedData.crypto.card_number,
-        total_price: encryptedData.total_price,
-        cvc: encryptedData.crypto.cvc,
-        userId: encryptedData.crypto.userId,
-        deviceToken: encryptedData.crypto.deviceToken
-        // time: encryptedData.crypto.time,
-        // pos_time: encryptedData.pos_time
+        card_company: data.cardDisplayModel.cardCompany,
+        card_number: data.cardDisplayModel.cardNumber,
+        cvc: data.cardDisplayModel.cvc,
+        total_price: Number(encryptedData.total_price),
+        userId: data.userId,
+        deviceToken: data.token,
+        time: data.time,
+        pos_time: encryptedData.pos_time
     };
+
+    if (Number(payInfo.pos_time)- Number(payInfo.time) < 60 * 1000) {
+        return errorSet.timeOver;
+    }
 
     console.log(payInfo);
 
