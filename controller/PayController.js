@@ -88,12 +88,12 @@ function chargePay(encryptedData, callback) {
             var query = 'insert into pay_info (total_price, card_id, user_id) values (?, ?, ?)';
             connection.query(query, [payInfo.total_price, pay_card_id, payInfo.userId], function (error, result) {
                 if (error) return callback(errorSet.syntaxError);
-                else callback(null);
+                else callback(null, result.insertId);
             })
         },
 
-        function (callback) {
-            PushController.sendPush(payInfo.deviceToken, payInfo.total_price, function (error, result) {
+        function (payId, callback) {
+            PushController.sendPush(payInfo.deviceToken, payInfo.total_price, payId, function (error, result) {
                 if (error) return callback(error);
                 else callback(null);
             })
@@ -157,7 +157,6 @@ function decrypt(encryptedData) {
     var iv = new Buffer(new Array(16));
     var key = new Buffer(new Array(32));
 
-
     var decryptedData = aes.decText(encryptedData.crypto, key, iv);
 
     var data = JSON.parse(decryptedData);
@@ -174,10 +173,11 @@ function decrypt(encryptedData) {
     };
 
 
-    if (Number(payInfo.time) - Number(payInfo.pos_time) < 60 * 1000) {
-
+    if (Number(payInfo.pos_time)- Number(payInfo.time) < 60 * 1000) {
         return errorSet.timeOver;
     }
+
+    console.log(payInfo);
 
     return payInfo;
 }

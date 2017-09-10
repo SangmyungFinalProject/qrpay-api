@@ -74,6 +74,7 @@ client.select(redisConfig.db, function (err) {
 var redisStore = new RedisStore({client: client});
 exports.connection = connection;
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
