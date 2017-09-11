@@ -69,15 +69,14 @@ function deleteUser(user_id, callback) {
 
     console.log('user_id', user_id);
 
-    connection.query('delete from user_info where id = ?', user_id, function(error) {
-        if (error) {
-            console.log(error);
-            callback(error);
+    connection.query('delete from user_info where id = ?', user_id, function(error, result) {
+        if (result.affectedRows === 0) {
+            var error_not_exist_user = 'user information not exist';
+            callback(error_not_exist_user);
         } else {
             connection.query('delete from user_card_info where user_id = ?', user_id, function(error, result) {
-                if(error) {
-                    console.log(error);
-                    callback(error);
+                if(result.affectedRows === 0) {
+                    callback(error_not_exist_user);
                 } else {
                     callback(null, result);
                 }

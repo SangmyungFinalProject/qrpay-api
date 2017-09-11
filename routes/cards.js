@@ -25,14 +25,14 @@ router.get('/', function (req, res, next) {
     CardController.readCards(userId, function (err, result) {
         if (err) {
             return res.json({error: err});
+        } else {
+            var response = {};
+            response.result = true;
+            response.message = "success";
+            response.data = result;
+
+            res.send(response);
         }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
     });
 });
 
@@ -109,14 +109,14 @@ router.post('/update', function (req, res) {
     CardController.updateCard(card, cardId, function (err, result) {
         if (err) {
             return res.json({error: err});
+        } else {
+            var response = {};
+            response.result = true;
+            response.message = "success";
+            response.data = result;
+
+            res.send(response);
         }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
     });
 });
 
