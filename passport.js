@@ -28,9 +28,9 @@ exports.initPassport = function (passport) {
                         return done(null, false);
                     }
 
-                    user.userId = insertUser.userId;
+                    user.id = insertUser.userId;
                     delete user.password;
-                    console.log('user local-signup : ' + user.userId);
+                    console.log('user local-signup : ' + user.id);
 
                     return done(null, user);
                 });
@@ -60,7 +60,7 @@ exports.initPassport = function (passport) {
                     }
 
                     var user = {};
-                    user.userId = result.userId;
+                    user.id = result.userId;
                     user.email = email;
                     user.name = result.name;
 

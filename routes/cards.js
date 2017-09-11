@@ -19,7 +19,7 @@ router.get('/', function (req, res, next) {
         return res.send(response);
     }
 
-    var userId = req.user.userId;
+    var userId = req.user.id;
 
     console.log('userId::', userId);
     CardController.readCards(userId, function (err, result) {
@@ -59,7 +59,7 @@ router.post('/', function (req, res) {
         bounds: Number(0)
     };
 
-    var userId = req.user.userId;
+    var userId = req.user.id;
 
     CardController.createCard(card, userId, function (err, result) {
         var response = {};
