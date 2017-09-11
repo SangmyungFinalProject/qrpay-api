@@ -46,7 +46,7 @@ router.post('/cancel', function (req, res) {
 
 router.get('/list', function (req, res) {
 
-    PayController.payList(req.user.userId, function (err, result) {
+    PayController.payList(req.user.id, function (err, result) {
         if (err) {
             return res.json({error: err});
         } else {

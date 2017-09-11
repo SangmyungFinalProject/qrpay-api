@@ -39,7 +39,7 @@ router.post('/login', passport.authenticate('local-login', {
 
 router.post('/delete', function (req, res) {
 
-    var userId = req.user.userId;
+    var userId = req.user.id;
 
     UserController.deleteUser(userId, function (err, result) {
         if (err) {
