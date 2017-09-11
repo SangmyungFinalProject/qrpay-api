@@ -54,7 +54,7 @@ router.post('/', function (req, res) {
         number: req.body.number,
         cvc: req.body.cvc,
         valid_date: req.body.validDate,
-        type: req.body.type,
+        type: Number(req.body.type),
         company: Number(req.body.company),
         bounds: Number(0)
     };
