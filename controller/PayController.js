@@ -27,7 +27,6 @@ function chargePay(encryptedData, callback) {
     var YY_MM = (Number(dt.toFormat('YYYY')) % 100 * 100 + Number(dt.toFormat('MM')));
 
     var pay_card_id = 0;
-    var valid_date = '0000';
 
     var bounds_user = 0;
     var bounds_calc = 0;
@@ -48,7 +47,6 @@ function chargePay(encryptedData, callback) {
                 else if (rows.length === 0) return callback(errorSet.notExist);
                 else {
                     pay_card_id = Number(rows[0].id);
-                    valid_date = rows[0].valid_date;
                     bounds_user = Number(rows[0].bounds);
                     callback(null);
                 }
@@ -56,7 +54,7 @@ function chargePay(encryptedData, callback) {
         },
 
         function (callback) {
-            if ((YY_MM - valid_date) > 0) return callback(errorSet.validOver);
+            if ((YY_MM - payInfo.validDate) > 0) return callback(errorSet.validOver);
             else callback(null);
         },
 
@@ -153,7 +151,7 @@ function payList(userId, callback) {
     });
 }
 
-function decrypt(encryptedData) {
+function decrypt(encryptedData, errorSet) {
     // decrypt encryptedData
 
     aes.setKeySize(256);
@@ -167,7 +165,7 @@ function decrypt(encryptedData) {
     console.log(data);
 
     var payInfo = {
-        card_company: data.cardDisplayModel.cardCompany,
+        vaildDate: data.cardDisplayModel.validDate,
         card_number: data.cardDisplayModel.cardNumber,
         cvc: data.cardDisplayModel.cvc,
         total_price: Number(encryptedData.total_price),
@@ -181,7 +179,7 @@ function decrypt(encryptedData) {
         return errorSet.timeOver;
     }
 
-    else return payInfo;
+    return payInfo;
 }
 
 module.exports = {

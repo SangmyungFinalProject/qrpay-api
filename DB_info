@@ -26,6 +26,7 @@ CREATE TABLE `card_info` (
   `valid_date` char(4) NOT NULL,
   `type` char(6) NOT NULL,
   `company` int(11) NOT NULL DEFAULT '1',
+  `bounds` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `company` (`company`),
   CONSTRAINT `card_info_ibfk_1` FOREIGN KEY (`company`) REFERENCES `card_company_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
