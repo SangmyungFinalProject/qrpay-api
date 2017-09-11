@@ -35,12 +35,6 @@ function chargePay(encryptedData, callback) {
 
     var tasks = [
         function (callback) {
-            if (isNaN(payInfo.userId) || isNaN(payInfo.cvc) || isNaN(payInfo.card_number) || isNaN(payInfo.total_price))
-                return callback(errorSet.dataNull);
-            else callback(null);
-        },
-
-        function (callback) {
             var query = 'select id, bounds, valid_date from card_info where number = ? and cvc = ?';
             connection.query(query, [payInfo.card_number, payInfo.cvc], function (error, rows) {
                 if (error) return callback(errorSet.syntaxError);
