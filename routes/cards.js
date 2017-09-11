@@ -53,7 +53,7 @@ router.post('/', function (req, res) {
     var card = {
         number: req.body.number,
         cvc: req.body.cvc,
-        valid_date: req.body.validDate,
+        valid_date: req.body.date,
         type: Number(req.body.type),
         company: Number(req.body.company),
         bounds: Number(0)

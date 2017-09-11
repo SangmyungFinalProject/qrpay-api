@@ -33,11 +33,14 @@ function insertUser(user, callback) {
     ];
 
     async.waterfall(tasks, function (err, result) {
-        if (err)
+        if (err) {
             console.log('err:', err);
-        else
+            callback(err);
+        }
+        else {
             console.log('done');
             callback(null, result);
+        }
     });
 }
 

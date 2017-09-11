@@ -70,7 +70,7 @@ function createCard(card, userId, callback) {
                                 var error_already = 'already insert id';
                                 callback(error_already);
                             } else {
-                                var params = [Number(userId), rows[0].id];
+                                var params = [Number(userId), cardId];
                                 console.log('params: ',params);
 
                                 var query = 'insert into user_card_info set user_id = (select id from user_info where id = ?), card_id = (select id from card_info where id = ?)';
