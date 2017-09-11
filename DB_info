@@ -38,29 +38,17 @@ CREATE TABLE `pay_info` (
   `card_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `cancel` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `card_id` (`card_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `pay_info_ibfk_1` FOREIGN KEY (`card_id`) REFERENCES `card_info` (`id`),
-  CONSTRAINT `pay_info_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pay_item_info` (
   `pay_id` int(11) NOT NULL,
-  `item_id` int(11) NOT NULL,
-  KEY `pay_id` (`pay_id`),
-  KEY `item_id` (`item_id`),
-  CONSTRAINT `pay_item_info_ibfk_1` FOREIGN KEY (`pay_id`) REFERENCES `pay_info` (`id`),
-  CONSTRAINT `pay_item_info_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `item_info` (`id`)
+  `item_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_card_info` (
   `user_id` int(11) NOT NULL,
-  `card_id` int(11) NOT NULL,
-  KEY `user_card_info_ibfk_1` (`user_id`),
-  KEY `user_card_info_ibfk_2` (`card_id`),
-  CONSTRAINT `user_card_info_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_card_info_ibfk_2` FOREIGN KEY (`card_id`) REFERENCES `card_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `card_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
