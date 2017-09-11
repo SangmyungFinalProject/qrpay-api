@@ -127,15 +127,15 @@ function deleteCard(cardId, callback) {
 
     console.log('cardId', cardId);
 
-    connection.query('delete from card_info where id = ?', cardId, function (error) {
-        if (error) {
-            console.log(error);
-            callback(error);
+    connection.query('delete from card_info where id = ?', cardId, function (error, result) {
+        if (result.affectedRows === 0) {
+            var error_not_exist_card = 'card information not exist';
+            callback(error_not_exist_card);
         } else {
             connection.query('delete from user_card_info where card_id = ?', cardId, function (error, result) {
-                if (error) {
-                    console.log(error);
-                    callback(error);
+                if (result.affectedRows === 0) {
+                    var error_not_exist_user = 'user_id or card_id not exist';
+                    callback(error_not_exist_user);
                 } else {
                     callback(null, cardId);
                 }

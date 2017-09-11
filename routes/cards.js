@@ -84,12 +84,12 @@ router.post('/delete', function (req, res) {
     CardController.deleteCard(cardId, function (err, result) {
         if (err) {
             return res.json({error: err});
+        } else {
+            var response = {};
+            response.result = true;
+            response.message = "success";
+            response.data = result;
         }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
 
         res.send(response);
     });
