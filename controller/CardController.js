@@ -123,21 +123,21 @@ function createCard(card, userId, callback) {
     });
 }
 
-function deleteCard(card_id, callback) {
+function deleteCard(cardId, callback) {
 
-    console.log('card_id', card_id);
+    console.log('cardId', cardId);
 
-    connection.query('delete from card_info where id = ?', card_id, function (error) {
+    connection.query('delete from card_info where id = ?', cardId, function (error) {
         if (error) {
             console.log(error);
             callback(error);
         } else {
-            connection.query('delete from user_card_info where card_id = ?', card_id, function (error, result) {
+            connection.query('delete from user_card_info where card_id = ?', cardId, function (error, result) {
                 if (error) {
                     console.log(error);
                     callback(error);
                 } else {
-                    callback(null, card_id);
+                    callback(null, cardId);
                 }
             });
         }
