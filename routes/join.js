@@ -44,14 +44,14 @@ router.post('/delete', function (req, res) {
     UserController.deleteUser(userId, function (err, result) {
         if (err) {
             return res.json({error: err});
+        } else {
+            var response = {};
+            response.result = true;
+            response.message = "success";
+            response.data = result;
+
+            res.send(response);
         }
-
-        var response = {};
-        response.result = true;
-        response.message = "success";
-        response.data = result;
-
-        res.send(response);
     });
 });
 
