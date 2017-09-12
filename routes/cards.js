@@ -103,7 +103,8 @@ router.post('/update', function (req, res) {
         number: req.body.number,
         cvc: req.body.cvc,
         valid_date: req.body.date,
-        type: req.body.type
+        type: req.body.type,
+        company: req.body.company
     };
 
     CardController.updateCard(card, cardId, function (err, result) {
