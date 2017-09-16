@@ -4,21 +4,21 @@ var PushController = require('./PushController');
 var async = require('async');
 var aes = require('aes-cross');
 
-var errorSet = {
-    dataNull: '1',
-    boundsOver: '2',
-    validOver: '3',
-    timeOver: '4',
-    notExist: '5',
-    syntaxError: '6'
-};
-
 function chargePay(encryptedData, callback) {
+
+    var errorSet = {
+        dataNull: '1',
+        boundsOver: '2',
+        validOver: '3',
+        timeOver: '4',
+        notExist: '5',
+        syntaxError: '6'
+    };
 
     var payInfo = decrypt(encryptedData);
 
-    if (payInfo === errorSet.timeOver) {
-        return callback(errorSet.timeOver);
+    if (Number(payInfo.pos_time) - Number(payInfo.time) > 60 * 1000) {
+        callback(errorSet.timeOver);
     }
 
     var dt = new Date();
@@ -34,6 +34,12 @@ function chargePay(encryptedData, callback) {
     console.log(payInfo);
 
     var tasks = [
+        function (callback) {
+            if (isNaN(payInfo.userId) || isNaN(payInfo.cvc) || isNaN(payInfo.total_price))
+                return callback(errorSet.dataNull);
+            else callback(null);
+        },
+
         function (callback) {
             var query = 'select id, bounds, valid_date from card_info where number = ? and cvc = ?';
             connection.query(query, [payInfo.card_number, payInfo.cvc], function (error, rows) {
@@ -168,10 +174,6 @@ function decrypt(encryptedData, errorSet) {
         time: data.time,
         pos_time: encryptedData.pos_time
     };
-
-    if (Number(payInfo.pos_time) - Number(payInfo.time) > 60 * 1000) {
-        return errorSet.timeOver;
-    }
 
     return payInfo;
 }
