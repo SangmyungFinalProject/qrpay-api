@@ -18,7 +18,7 @@ function chargePay(encryptedData, callback) {
     var payInfo = decrypt(encryptedData);
 
     if (Number(payInfo.pos_time) - Number(payInfo.time) > 60 * 1000) {
-        callback(errorSet.timeOver);
+        return callback(errorSet.timeOver);
     }
 
     var dt = new Date();
@@ -34,12 +34,6 @@ function chargePay(encryptedData, callback) {
     console.log(payInfo);
 
     var tasks = [
-        function (callback) {
-            if (isNaN(payInfo.userId) || isNaN(payInfo.cvc) || isNaN(payInfo.total_price))
-                return callback(errorSet.dataNull);
-            else callback(null);
-        },
-
         function (callback) {
             var query = 'select id, bounds, valid_date from card_info where number = ? and cvc = ?';
             connection.query(query, [payInfo.card_number, payInfo.cvc], function (error, rows) {
